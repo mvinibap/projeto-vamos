@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { FilterBadge } from '@/components/FilterBadge'
+import { usePagination, PaginatorControls } from '@/components/Paginator'
 
 type EqStatus = 'disponivel' | 'reservado' | 'indisponivel'
 
@@ -29,7 +30,9 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
   const reservados   = equipamentos.filter((e) => e.status === 'reservado').length
   const indisponiveis = equipamentos.filter((e) => e.status === 'indisponivel').length
 
-  const visiveis = filtro ? equipamentos.filter((e) => e.status === filtro) : equipamentos
+  const filtered = filtro ? equipamentos.filter((e) => e.status === filtro) : equipamentos
+  const pagination = usePagination(filtered, 50)
+  const visiveis = pagination.visible
 
   return (
     <main style={{ padding: '32px 32px 64px' }}>
@@ -40,7 +43,7 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
         </h1>
         <p style={{ fontSize: 14, color: '#94a3b8' }}>
           {filtro
-            ? <>{visiveis.length} equipamento{visiveis.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CFG[filtro].label}</strong></>
+            ? <>{filtered.length} equipamento{filtered.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CFG[filtro].label}</strong></>
             : `${total} equipamento${total !== 1 ? 's' : ''} na frota`
           }
           {filtro && (
@@ -95,7 +98,7 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
                 </tr>
               )
             })}
-            {visiveis.length === 0 && (
+            {filtered.length === 0 && (
               <tr>
                 <td colSpan={5} style={{ padding: '60px 16px', textAlign: 'center', color: '#475569' }}>
                   {filtro ? (
@@ -108,6 +111,7 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
             )}
           </tbody>
         </table>
+        <PaginatorControls {...pagination} label="equipamento" />
       </div>
     </main>
   )

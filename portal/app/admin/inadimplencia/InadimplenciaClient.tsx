@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { FilterBadge } from '@/components/FilterBadge'
+import { PaginatorControls } from '@/components/Paginator'
 
 type RiskLevel = 'vencido' | 'vence_hoje' | 'vence_semana' | 'ok'
 
@@ -28,9 +29,19 @@ const RISCO_CFG: Record<RiskLevel, { label: string; filterLabel: string; title: 
 
 const RISK_ORDER: RiskLevel[] = ['vencido', 'vence_hoje', 'vence_semana', 'ok']
 
+const PAGE_SIZE = 50
+
 export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[] }) {
   const [filtro, setFiltro] = useState<RiskLevel | null>(null)
   const toggle = (r: RiskLevel) => setFiltro((prev) => (prev === r ? null : r))
+
+  const [pages, setPages] = useState<Record<RiskLevel, number>>({ vencido: 1, vence_hoje: 1, vence_semana: 1, ok: 1 })
+  const setGroupPage = (k: RiskLevel, p: number) => setPages((prev) => ({ ...prev, [k]: p }))
+
+  // reset all pages when filter changes
+  useEffect(() => {
+    setPages({ vencido: 1, vence_hoje: 1, vence_semana: 1, ok: 1 })
+  }, [filtro])
 
   const counts: Record<RiskLevel, number> = { vencido: 0, vence_hoje: 0, vence_semana: 0, ok: 0 }
   rows.forEach((r) => { counts[r._risco]++ })
@@ -80,6 +91,11 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
         const items = rows.filter((r) => r._risco === key)
         if (items.length === 0) return null
         const cfg = RISCO_CFG[key]
+        const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE))
+        const groupPage = Math.min(pages[key] || 1, totalPages)
+        const start = (groupPage - 1) * PAGE_SIZE
+        const end = Math.min(start + PAGE_SIZE, items.length)
+        const visibleItems = items.slice(start, end)
         return (
           <section key={key} style={{ marginBottom: 24 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 12 }}>
@@ -96,11 +112,11 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map((p, i) => {
+                  {visibleItems.map((p, i) => {
                     const scoreColor = p._scoreRec === 'aprovado' ? '#4ade80' : p._scoreRec === 'analise' ? '#facc15' : '#f87171'
                     const diffLabel = p._diffDias < 0 ? `${Math.abs(p._diffDias)} dias atraso` : p._diffDias === 0 ? 'Hoje' : `${p._diffDias} dias`
                     return (
-                      <tr key={p.id} style={{ borderBottom: i < items.length - 1 ? '1px solid #1e293b' : 'none', borderLeft: `3px solid ${cfg.color}40` }}>
+                      <tr key={p.id} style={{ borderBottom: i < visibleItems.length - 1 ? '1px solid #1e293b' : 'none', borderLeft: `3px solid ${cfg.color}40` }}>
                         <td style={{ padding: '11px 16px', color: '#e2e8f0', fontWeight: 500 }}>
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block', maxWidth: 180 }}>{p.nome_empresa}</span>
                           <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>{p.numero_pedido}</span>
@@ -132,6 +148,16 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                   })}
                 </tbody>
               </table>
+              <PaginatorControls
+                page={groupPage}
+                totalPages={totalPages}
+                setPage={(p) => setGroupPage(key, p)}
+                total={items.length}
+                start={start}
+                end={end}
+                pageSize={PAGE_SIZE}
+                label="contrato"
+              />
             </div>
           </section>
         )

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { FilterBadge } from '@/components/FilterBadge'
+import { usePagination, PaginatorControls } from '@/components/Paginator'
 
 type PedidoStatus = 'novo' | 'em_analise' | 'contrato_enviado' | 'assinado' | 'ativo' | 'rejeitado'
 
@@ -37,7 +38,9 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
 
   const toggle = (s: PedidoStatus) => setFiltro((prev) => (prev === s ? null : s))
 
-  const visiveis = filtro ? pedidos.filter((p) => p.status === filtro) : pedidos
+  const filtered = filtro ? pedidos.filter((p) => p.status === filtro) : pedidos
+  const pagination = usePagination(filtered, 50)
+  const visiveis = pagination.visible
 
   return (
     <main style={{ padding: '32px 32px 64px' }}>
@@ -49,7 +52,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
           </h1>
           <p style={{ fontSize: 14, color: '#94a3b8' }}>
             {filtro
-              ? <>{visiveis.length} pedido{visiveis.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CONFIG[filtro].label}</strong></>
+              ? <>{filtered.length} pedido{filtered.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CONFIG[filtro].label}</strong></>
               : <>{pedidos.length} pedido{pedidos.length !== 1 ? 's' : ''} no total</>
             }
             {filtro && (
@@ -134,7 +137,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
                 </tr>
               )
             })}
-            {visiveis.length === 0 && (
+            {filtered.length === 0 && (
               <tr>
                 <td colSpan={8} style={{ padding: '60px 16px', textAlign: 'center', color: '#475569' }}>
                   {filtro ? (
@@ -150,6 +153,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
             )}
           </tbody>
         </table>
+        <PaginatorControls {...pagination} label="pedido" />
       </div>
     </main>
   )
