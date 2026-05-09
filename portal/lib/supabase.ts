@@ -40,6 +40,11 @@ export type Pedido = {
     situacao: string
     tempo_anos: number
     capital_social: string
+    porte?: string
+    regime?: string
+    setor?: string
+    limite_credito?: number
+    recomendacao?: 'aprovado' | 'analise' | 'negado'
   } | null
   created_at: string
   updated_at: string

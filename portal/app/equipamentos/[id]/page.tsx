@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import EquipamentoFoto from '@/components/EquipamentoFoto'
+import AlugarVsComprar from '@/components/AlugarVsComprar'
 
 async function getEquipamento(id: string) {
   const { data } = await supabase.from('equipamentos').select('*').eq('id', id).single()
@@ -101,6 +102,9 @@ export default async function EquipamentoPage({ params }: { params: Promise<{ id
                 </div>
               </div>
             )}
+
+            {/* Calculador Alugar vs Comprar */}
+            {eq.preco_dia && <AlugarVsComprar precoDia={eq.preco_dia} />}
 
             {/* CTA */}
             <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24 }}>

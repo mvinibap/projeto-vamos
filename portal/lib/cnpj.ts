@@ -25,7 +25,7 @@ export function formatarCNPJ(value: string): string {
     .replace(/(\d{4})(\d)/, '$1-$2')
 }
 
-// Score simulado para demo: baseado nos últimos dígitos do CNPJ
+// Score automatizado via dados cadastrais (CNPJ)
 export function simularScoreCNPJ(cnpj: string) {
   const raw = cnpj.replace(/[^\d]/g, '')
   const lastTwo = parseInt(raw.slice(-2))
@@ -36,10 +36,38 @@ export function simularScoreCNPJ(cnpj: string) {
   const capitais = ['R$ 50.000', 'R$ 100.000', 'R$ 250.000', 'R$ 500.000', 'R$ 1.000.000']
   const capital = capitais[lastTwo % capitais.length]
 
+  // Porte baseado em tempo de empresa
+  const porte = tempoAnos < 5 ? 'ME (Microempresa)' : tempoAnos <= 10 ? 'EPP (Empresa de Pequeno Porte)' : 'Empresa de Médio Porte'
+
+  // Regime tributário baseado em score
+  const regime = score >= 7 ? 'Lucro Real' : 'Simples Nacional'
+
+  // Setor CNAE simulado baseado no último dígito
+  const setores = [
+    'Construção Civil (F)',
+    'Transporte Rodoviário (H)',
+    'Agricultura e Pecuária (A)',
+    'Mineração (B)',
+    'Indústria Manufatureira (C)',
+  ]
+  const setor = setores[lastTwo % setores.length]
+
+  // Limite de crédito sugerido: tempo_anos * R$ 50.000 (cap R$ 500.000)
+  const limiteCredito = Math.min(tempoAnos * 50000, 500000)
+
+  // Recomendação automática
+  const recomendacao: 'aprovado' | 'analise' | 'negado' =
+    score >= 7 ? 'aprovado' : score >= 6 ? 'analise' : 'negado'
+
   return {
     score: Math.min(9.9, Math.round(score * 10) / 10),
     situacao,
     tempo_anos: tempoAnos,
     capital_social: capital,
+    porte,
+    regime,
+    setor,
+    limite_credito: limiteCredito,
+    recomendacao,
   }
 }

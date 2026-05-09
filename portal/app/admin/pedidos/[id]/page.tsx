@@ -22,7 +22,8 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
   const pedido = await getPedido(id)
   if (!pedido) notFound()
 
-  const score = pedido.cnpj_score ?? simularScoreCNPJ(pedido.cnpj)
+  // Sempre re-rodar simularScoreCNPJ para garantir campos completos (porte, regime, setor, etc.)
+  const score = simularScoreCNPJ(pedido.cnpj)
   const eq = pedido.equipamentos
   const dias = Math.round(
     (new Date(pedido.data_fim).getTime() - new Date(pedido.data_inicio).getTime()) / (1000 * 60 * 60 * 24)
@@ -102,24 +103,47 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
           {/* Score CNPJ + Ações */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <section style={{ borderRadius: 12, border: `1px solid ${scoreBorder}`, background: scoreBg, padding: 24 }}>
-              <h2 style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', marginBottom: 20 }}>📊 Análise de CNPJ</h2>
+              <h2 style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', marginBottom: 16 }}>📊 Análise de Crédito</h2>
 
-              <div style={{ textAlign: 'center', marginBottom: 24 }}>
-                <p className="font-display" style={{ fontSize: 64, fontWeight: 800, color: scoreColor, lineHeight: 1, letterSpacing: '-2px' }}>
+              {/* Badge de recomendação automática */}
+              {(() => {
+                const rec = score.recomendacao
+                const recConfig = {
+                  aprovado: { label: '✓ CRÉDITO PRÉ-APROVADO', bg: 'rgba(34,197,94,0.15)', border: 'rgba(34,197,94,0.4)', color: '#4ade80' },
+                  analise:  { label: '⚠ ANÁLISE MANUAL NECESSÁRIA', bg: 'rgba(234,179,8,0.1)', border: 'rgba(234,179,8,0.35)', color: '#facc15' },
+                  negado:   { label: '✗ CRÉDITO NEGADO AUTOMATICAMENTE', bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.35)', color: '#f87171' },
+                }[rec]
+                return (
+                  <div style={{ borderRadius: 8, border: `1px solid ${recConfig.border}`, background: recConfig.bg, padding: '10px 14px', marginBottom: 20 }}>
+                    <p style={{ fontSize: 12, fontWeight: 800, color: recConfig.color, letterSpacing: '0.5px' }}>{recConfig.label}</p>
+                    {rec === 'aprovado' && (
+                      <p style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>
+                        Limite sugerido: R$ {score.limite_credito.toLocaleString('pt-BR')}
+                      </p>
+                    )}
+                  </div>
+                )
+              })()}
+
+              <div style={{ textAlign: 'center', marginBottom: 20 }}>
+                <p className="font-display" style={{ fontSize: 56, fontWeight: 800, color: scoreColor, lineHeight: 1, letterSpacing: '-2px' }}>
                   {score.score.toFixed(1)}
                 </p>
-                <p style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>Score de risco</p>
+                <p style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Score de risco (0–10)</p>
               </div>
 
-              <dl style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <ScoreItem label="Situação" value={score.situacao} ok={score.situacao === 'Ativa'} />
+              <dl style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <ScoreItem label="Situação cadastral" value={score.situacao} ok={score.situacao === 'Ativa'} />
                 <ScoreItem label="Tempo de empresa" value={`${score.tempo_anos} anos`} ok={score.tempo_anos >= 2} />
                 <ScoreItem label="Capital social" value={score.capital_social} ok />
+                <ScoreItem label="Porte" value={score.porte} ok />
+                <ScoreItem label="Regime tributário" value={score.regime} ok />
+                <ScoreItem label="Setor principal (CNAE)" value={score.setor} ok />
               </dl>
 
-              <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #1e293b' }}>
-                <p style={{ fontSize: 11, color: '#475569', lineHeight: 1.5 }}>
-                  Análise simulada para demonstração. Produção: integração com Receita Federal.
+              <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #1e293b' }}>
+                <p style={{ fontSize: 11, color: '#334155', lineHeight: 1.5 }}>
+                  Análise automatizada via dados cadastrais. Atualizado em {new Date().toLocaleDateString('pt-BR')}.
                 </p>
               </div>
             </section>

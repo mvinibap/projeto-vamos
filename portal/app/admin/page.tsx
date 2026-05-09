@@ -29,6 +29,38 @@ export default async function AdminPage() {
   const ativos = pedidos.filter((p) => p.status === 'ativo').length
   const contratos = pedidos.filter((p) => ['contrato_enviado', 'assinado', 'ativo'].includes(p.status)).length
 
+  // ── Analytics ────────────────────────────────────────────────────────────
+  const aprovados = pedidos.filter((p) => ['ativo', 'assinado', 'contrato_enviado'].includes(p.status)).length
+  const taxaAprovacao = pedidos.length > 0 ? Math.round((aprovados / pedidos.length) * 100) : 0
+
+  const pedidosComValor = pedidos
+    .filter((p) => (p as any).equipamentos?.preco_dia)
+    .map((p) => {
+      const dias = Math.max(1, Math.round(
+        (new Date(p.data_fim).getTime() - new Date(p.data_inicio).getTime()) / (1000 * 60 * 60 * 24)
+      ))
+      const valor = ((p as any).equipamentos.preco_dia as number) * dias
+      return { ...p, valor }
+    })
+
+  const ticketMedio = pedidosComValor.length > 0
+    ? Math.round(pedidosComValor.reduce((s, p) => s + p.valor, 0) / pedidosComValor.length)
+    : null
+
+  const valorAtivo = pedidosComValor
+    .filter((p) => p.status === 'ativo')
+    .reduce((s, p) => s + p.valor, 0)
+
+  // Top estados por volume
+  const estadoMap: Record<string, number> = {}
+  pedidos.forEach((p) => { estadoMap[p.estado_entrega] = (estadoMap[p.estado_entrega] || 0) + 1 })
+  const topEstados = Object.entries(estadoMap).sort(([, a], [, b]) => b - a).slice(0, 5)
+
+  // Funil de status
+  const statusMap: Record<string, number> = {}
+  pedidos.forEach((p) => { statusMap[p.status] = (statusMap[p.status] || 0) + 1 })
+  const maxStatusN = Math.max(...Object.values(statusMap), 1)
+
   return (
     <div style={{ minHeight: '100vh', background: '#030712', color: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
       {/* Header */}
@@ -52,6 +84,85 @@ export default async function AdminPage() {
           <KPI label="Contratos emitidos" value={contratos} />
           <KPI label="Locações ativas" value={ativos} />
         </div>
+
+        {/* Analytics de Performance */}
+        {pedidos.length > 0 && (
+          <section style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
+              Análise de Performance
+            </h2>
+            <div className="kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 16 }}>
+              {/* Taxa de aprovação */}
+              <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
+                <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
+                <p className="font-display" style={{ fontSize: 36, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px' }}>
+                  {taxaAprovacao}%
+                </p>
+              </div>
+              {/* Ticket médio */}
+              <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
+                <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
+                <p className="font-display" style={{ fontSize: 36, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px' }}>
+                  {ticketMedio ? `R$ ${ticketMedio.toLocaleString('pt-BR')}` : '—'}
+                </p>
+              </div>
+              {/* Valor em locação ativa */}
+              <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
+                <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
+                <p className="font-display" style={{ fontSize: valorAtivo > 0 ? 28 : 36, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px' }}>
+                  {valorAtivo > 0 ? `R$ ${valorAtivo.toLocaleString('pt-BR')}` : '—'}
+                </p>
+              </div>
+            </div>
+
+            {/* Distribuição geográfica + Funil de status */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              {/* Top estados */}
+              <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
+                <p style={{ fontSize: 12, color: '#64748b', marginBottom: 14, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Top estados (pedidos)
+                </p>
+                {topEstados.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {topEstados.map(([estado, count]) => (
+                      <div key={estado} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', width: 28, flexShrink: 0 }}>{estado}</span>
+                        <div style={{ flex: 1, background: '#1e293b', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+                          <div style={{ width: `${Math.round((count / (topEstados[0]?.[1] ?? 1)) * 100)}%`, height: '100%', background: RED, borderRadius: 4 }} />
+                        </div>
+                        <span style={{ fontSize: 12, color: '#64748b', width: 20, textAlign: 'right', flexShrink: 0 }}>{count}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p style={{ fontSize: 13, color: '#475569' }}>Sem dados</p>
+                )}
+              </div>
+
+              {/* Funil de status */}
+              <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
+                <p style={{ fontSize: 12, color: '#64748b', marginBottom: 14, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Funil de status
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {Object.entries(STATUS_CONFIG).map(([status, cfg]) => {
+                    const count = statusMap[status] ?? 0
+                    if (count === 0) return null
+                    return (
+                      <div key={status} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 11, color: '#64748b', width: 90, flexShrink: 0 }}>{cfg.label}</span>
+                        <div style={{ flex: 1, background: '#1e293b', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+                          <div style={{ width: `${Math.round((count / maxStatusN) * 100)}%`, height: '100%', background: cfg.bg, borderRadius: 4 }} />
+                        </div>
+                        <span style={{ fontSize: 12, color: '#64748b', width: 20, textAlign: 'right', flexShrink: 0 }}>{count}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Fila: pedidos novos */}
         {novos.length > 0 && (
