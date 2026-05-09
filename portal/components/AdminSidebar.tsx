@@ -110,11 +110,11 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
         {isExpanded && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{
-              background: RED, color: '#fff', fontWeight: 800, fontSize: 13,
+              background: '#4ade80', color: '#fff', fontWeight: 800, fontSize: 13,
               padding: '4px 7px', borderRadius: 4, lineHeight: 1, letterSpacing: '-0.3px',
               fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)',
             }}>
-              VAMOS
+              VAMOS ✓
             </span>
             <span style={{ fontSize: 11, color: '#334155', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
               Painel Admin
