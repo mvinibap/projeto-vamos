@@ -88,6 +88,25 @@ export default async function AdminDashboard() {
 
   const totalInadimplencia = vencidos.length + venceHoje.length
 
+  // Valores em risco
+  const valorVencido = vencidos.reduce((sum, p) => {
+    const eq = (p as any).equipamentos
+    const dias = Math.max(1, Math.round(
+      (new Date(p.data_fim).getTime() - new Date(p.data_inicio).getTime()) / (1000 * 60 * 60 * 24)
+    ))
+    return sum + (eq?.preco_dia ? eq.preco_dia * dias : 0)
+  }, 0)
+
+  const valorVenceHoje = venceHoje.reduce((sum, p) => {
+    const eq = (p as any).equipamentos
+    const dias = Math.max(1, Math.round(
+      (new Date(p.data_fim).getTime() - new Date(p.data_inicio).getTime()) / (1000 * 60 * 60 * 24)
+    ))
+    return sum + (eq?.preco_dia ? eq.preco_dia * dias : 0)
+  }, 0)
+
+  const totalValorEmRisco = valorVencido + valorVenceHoje
+
   return (
     <main style={{ padding: '32px 32px 64px' }}>
       {/* Page title */}
@@ -161,6 +180,55 @@ export default async function AdminDashboard() {
         <KPI label="Contratos emitidos" value={contratos} />
         <KPI label="Locações ativas" value={ativos} />
       </div>
+
+      {/* Financial Health */}
+      <section style={{ marginBottom: 28 }}>
+        <h2 style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 14 }}>
+          Saúde Financeira & Inadimplência
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 20 }}>
+          <div style={{ background: vencidos.length > 0 ? 'rgba(239,68,68,0.08)' : '#0f172a', borderRadius: 12, border: `1px solid ${vencidos.length > 0 ? 'rgba(239,68,68,0.3)' : '#1e293b'}`, padding: '16px' }}>
+            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Vencidos</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: vencidos.length > 0 ? '#f87171' : '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+              {vencidos.length}
+            </p>
+            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
+              {valorVencido > 0 ? `R$ ${(valorVencido / 1000).toFixed(0)}k` : '—'}
+            </p>
+          </div>
+
+          <div style={{ background: venceHoje.length > 0 ? 'rgba(251,146,60,0.06)' : '#0f172a', borderRadius: 12, border: `1px solid ${venceHoje.length > 0 ? 'rgba(251,146,60,0.25)' : '#1e293b'}`, padding: '16px' }}>
+            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Vence hoje</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: venceHoje.length > 0 ? '#fb923c' : '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+              {venceHoje.length}
+            </p>
+            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
+              {valorVenceHoje > 0 ? `R$ ${(valorVenceHoje / 1000).toFixed(0)}k` : '—'}
+            </p>
+          </div>
+
+          <div style={{ background: venceSemana.length > 0 ? 'rgba(234,179,8,0.06)' : '#0f172a', borderRadius: 12, border: `1px solid ${venceSemana.length > 0 ? 'rgba(234,179,8,0.2)' : '#1e293b'}`, padding: '16px' }}>
+            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Vence em 7d</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: venceSemana.length > 0 ? '#facc15' : '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+              {venceSemana.length}
+            </p>
+            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
+              {pedidosContrato.length > 0 ? `${Math.round((venceSemana.length / pedidosContrato.length) * 100)}%` : '—'}
+            </p>
+          </div>
+
+          <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '16px' }}>
+            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Em risco</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+              {totalInadimplencia}
+            </p>
+            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
+              {pedidosContrato.length > 0 ? Math.round((totalInadimplencia / pedidosContrato.length) * 100) : 0}% do total
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Performance */}
       <section style={{ marginBottom: 28 }}>
