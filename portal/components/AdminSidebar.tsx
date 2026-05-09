@@ -102,16 +102,20 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           title={isExpanded ? 'Colapsar menu' : 'Expandir menu'}
+          aria-label={isExpanded ? 'Colapsar menu' : 'Expandir menu'}
           style={{
             background: 'transparent',
             border: 'none',
             color: '#64748b',
             cursor: 'pointer',
-            padding: 6,
+            width: 44,
+            height: 44,
             borderRadius: 6,
             display: 'flex',
             flexDirection: 'column',
             gap: 4,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <span style={{ display: 'block', width: 16, height: 1.5, background: 'currentColor', borderRadius: 1 }} />
@@ -132,7 +136,8 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
                 display: 'flex',
                 alignItems: 'center',
                 gap: 10,
-                padding: '9px 10px',
+                padding: '0 12px',
+                minHeight: 44,
                 borderRadius: 8,
                 textDecoration: 'none',
                 marginBottom: 2,
@@ -184,8 +189,8 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
       {/* Footer */}
       <div style={{ borderTop: '1px solid #1e293b' }}>
         {isExpanded && (
-          <div style={{ padding: '12px 16px' }}>
-            <Link href="/" style={{ fontSize: 12, color: '#475569', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ padding: '8px 8px 12px' }}>
+            <Link href="/" style={{ fontSize: 12, color: '#475569', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
               <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
                 <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
               </svg>

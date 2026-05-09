@@ -127,7 +127,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
                     {new Date(p.created_at).toLocaleDateString('pt-BR')}
                   </td>
                   <td style={{ padding: '12px 16px' }}>
-                    <Link href={`/admin/pedidos/${p.id}`} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap' }}>
+                    <Link href={`/admin/pedidos/${p.id}`} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', padding: '0 12px', minHeight: 36, borderRadius: 6, background: '#1e293b', border: '1px solid #334155', display: 'inline-flex', alignItems: 'center' }}>
                       Ver →
                     </Link>
                   </td>

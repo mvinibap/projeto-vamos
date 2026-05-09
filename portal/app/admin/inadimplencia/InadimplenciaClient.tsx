@@ -123,7 +123,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                           </span>
                         </td>
                         <td style={{ padding: '11px 16px' }}>
-                          <Link href={`/admin/pedidos/${p.id}`} style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textDecoration: 'none', padding: '5px 12px', borderRadius: 6, background: '#1e293b', border: '1px solid #334155', whiteSpace: 'nowrap' }}>
+                          <Link href={`/admin/pedidos/${p.id}`} style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textDecoration: 'none', padding: '0 12px', minHeight: 36, borderRadius: 6, background: '#1e293b', border: '1px solid #334155', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
                             Ver →
                           </Link>
                         </td>

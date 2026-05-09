@@ -191,9 +191,10 @@ export default function TriagemClient({
                     style={{
                       background: rec === 'aprovado' ? 'rgba(34,197,94,0.15)' : rec === 'negado' ? 'rgba(239,68,68,0.12)' : '#1e293b',
                       color: rec === 'aprovado' ? '#4ade80' : rec === 'negado' ? '#f87171' : '#94a3b8',
-                      fontSize: 12, fontWeight: 700, padding: '6px 14px', borderRadius: 6,
+                      fontSize: 12, fontWeight: 700, padding: '0 14px', minHeight: 36, borderRadius: 6,
                       textDecoration: 'none', whiteSpace: 'nowrap',
                       border: `1px solid ${rec === 'aprovado' ? 'rgba(34,197,94,0.3)' : rec === 'negado' ? 'rgba(239,68,68,0.25)' : '#334155'}`,
+                      display: 'inline-flex', alignItems: 'center',
                     }}
                   >
                     Analisar →
@@ -242,7 +243,7 @@ export default function TriagemClient({
                     {p._valor ? `R$ ${p._valor.toLocaleString('pt-BR')}` : '—'}
                   </p>
                   <p style={{ fontSize: 11, color: p._idadeDias >= 3 ? '#f87171' : '#64748b' }}>{idadeLabel}</p>
-                  <Link href={`/admin/pedidos/${p.id}`} style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textDecoration: 'none', padding: '6px 14px', borderRadius: 6, background: '#1e293b', border: '1px solid #334155', whiteSpace: 'nowrap' }}>
+                  <Link href={`/admin/pedidos/${p.id}`} style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textDecoration: 'none', padding: '0 14px', minHeight: 36, borderRadius: 6, background: '#1e293b', border: '1px solid #334155', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
                     Continuar →
                   </Link>
                 </div>

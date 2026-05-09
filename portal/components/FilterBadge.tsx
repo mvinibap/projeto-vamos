@@ -26,6 +26,7 @@ export function FilterBadge({
         border: `1px solid ${active ? color : `${color}25`}`,
         borderRadius: 8,
         padding: '8px 16px',
+        minHeight: 44,
         display: 'flex',
         alignItems: 'center',
         gap: 10,
