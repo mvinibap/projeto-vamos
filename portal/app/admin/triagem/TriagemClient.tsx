@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { FilterBadge } from '@/components/FilterBadge'
 
 type ScoreResult = {
   score: number
@@ -274,45 +275,3 @@ export default function TriagemClient({
   )
 }
 
-function FilterBadge({
-  label,
-  value,
-  color,
-  bg,
-  active,
-  onClick,
-}: {
-  label: string
-  value: number
-  color: string
-  bg: string
-  active: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        background: active ? bg.replace('0.1', '0.18').replace('0.08', '0.15') : bg,
-        border: `1px solid ${active ? color : `${color}25`}`,
-        borderRadius: 8,
-        padding: '8px 16px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-        cursor: 'pointer',
-        outline: 'none',
-        transition: 'border-color 0.15s, box-shadow 0.15s',
-        boxShadow: active ? `0 0 0 1px ${color}40` : 'none',
-      }}
-    >
-      <span style={{ fontSize: 20, fontWeight: 800, color, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', lineHeight: 1 }}>
-        {value}
-      </span>
-      <span style={{ fontSize: 12, color: active ? '#cbd5e1' : '#64748b' }}>{label}</span>
-      {active && (
-        <span style={{ fontSize: 10, color, marginLeft: 2 }}>✕</span>
-      )}
-    </button>
-  )
-}

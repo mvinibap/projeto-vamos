@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { FilterBadge } from '@/components/FilterBadge'
 
 type RiskLevel = 'vencido' | 'vence_hoje' | 'vence_semana' | 'ok'
 
@@ -18,12 +19,14 @@ export type InadimplenciaRow = {
   _valor: number | null
 }
 
-const RISCO_CFG: Record<RiskLevel, { label: string; title: string; subtitle: string; color: string; bg: string; border: string; kpiBg: string; kpiBorder: string }> = {
-  vencido:      { label: 'Vencido',       title: '🚨 Contratos vencidos',      subtitle: 'Equipamentos ainda em uso após término do contrato', color: '#f87171', bg: 'rgba(239,68,68,0.1)',  border: 'rgba(239,68,68,0.3)',  kpiBg: 'rgba(239,68,68,0.08)',  kpiBorder: 'rgba(239,68,68,0.3)'  },
-  vence_hoje:   { label: 'Vence hoje',    title: '⚠️ Vencem hoje',             subtitle: 'Entrar em contato para renovação ou devolução',       color: '#fb923c', bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.3)', kpiBg: 'rgba(251,146,60,0.06)', kpiBorder: 'rgba(251,146,60,0.25)' },
-  vence_semana: { label: 'Vence em breve',title: '📅 Vencem em até 7 dias',    subtitle: 'Prospectar renovação proativamente',                   color: '#facc15', bg: 'rgba(234,179,8,0.08)', border: 'rgba(234,179,8,0.25)', kpiBg: 'rgba(234,179,8,0.06)',  kpiBorder: 'rgba(234,179,8,0.2)'  },
-  ok:           { label: 'Em dia',        title: 'Em dia',                     subtitle: 'Contratos ativos sem risco imediato',                  color: '#4ade80', bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.2)',  kpiBg: 'rgba(34,197,94,0.08)',  kpiBorder: 'rgba(34,197,94,0.2)'  },
+const RISCO_CFG: Record<RiskLevel, { label: string; filterLabel: string; title: string; subtitle: string; filterColor: string; filterBg: string; color: string; bg: string; border: string }> = {
+  vencido:      { label: 'Vencido',       filterLabel: 'Vencidos',       title: '🚨 Contratos vencidos',   subtitle: 'Equipamentos ainda em uso após término do contrato', filterColor: '#f87171', filterBg: 'rgba(239,68,68,0.1)',  color: '#f87171', bg: 'rgba(239,68,68,0.1)',  border: 'rgba(239,68,68,0.3)'  },
+  vence_hoje:   { label: 'Vence hoje',    filterLabel: 'Vencem hoje',    title: '⚠️ Vencem hoje',          subtitle: 'Entrar em contato para renovação ou devolução',       filterColor: '#fb923c', filterBg: 'rgba(251,146,60,0.1)', color: '#fb923c', bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.3)' },
+  vence_semana: { label: 'Vence em breve',filterLabel: 'Vencem em 7 dias',title: '📅 Vencem em até 7 dias',subtitle: 'Prospectar renovação proativamente',                   filterColor: '#facc15', filterBg: 'rgba(234,179,8,0.1)',  color: '#facc15', bg: 'rgba(234,179,8,0.08)', border: 'rgba(234,179,8,0.25)' },
+  ok:           { label: 'Em dia',        filterLabel: 'Em dia',         title: 'Em dia',                 subtitle: 'Contratos ativos sem risco imediato',                  filterColor: '#4ade80', filterBg: 'rgba(34,197,94,0.1)',  color: '#4ade80', bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.2)'  },
 }
+
+const RISK_ORDER: RiskLevel[] = ['vencido', 'vence_hoje', 'vence_semana', 'ok']
 
 export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[] }) {
   const [filtro, setFiltro] = useState<RiskLevel | null>(null)
@@ -32,8 +35,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
   const counts: Record<RiskLevel, number> = { vencido: 0, vence_hoje: 0, vence_semana: 0, ok: 0 }
   rows.forEach((r) => { counts[r._risco]++ })
 
-  const groups: RiskLevel[] = ['vencido', 'vence_hoje', 'vence_semana', 'ok']
-  const activeGroups = filtro ? [filtro] : groups.filter((g) => counts[g] > 0)
+  const activeGroups = filtro ? [filtro] : RISK_ORDER.filter((g) => counts[g] > 0)
 
   return (
     <main style={{ padding: '32px 32px 64px' }}>
@@ -44,7 +46,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
         </h1>
         <p style={{ fontSize: 13, color: '#475569' }}>
           {filtro
-            ? <>Filtrando por <strong style={{ color: '#cbd5e1' }}>{RISCO_CFG[filtro].label}</strong> · {rows.filter((r) => r._risco === filtro).length} contrato{rows.filter((r) => r._risco === filtro).length !== 1 ? 's' : ''}</>
+            ? <>Filtrando por <strong style={{ color: '#cbd5e1' }}>{RISCO_CFG[filtro].label}</strong> · {counts[filtro]} contrato{counts[filtro] !== 1 ? 's' : ''}</>
             : 'Contratos ativos ordenados por data de vencimento'
           }
           {filtro && (
@@ -55,29 +57,22 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
         </p>
       </div>
 
-      {/* KPI cards — clicáveis */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 28 }}>
-        <KpiCard risco="vencido"      value={counts.vencido}      active={filtro === 'vencido'}      onClick={() => toggle('vencido')}      neutralWhen={counts.vencido === 0} />
-        <KpiCard risco="vence_hoje"   value={counts.vence_hoje}   active={filtro === 'vence_hoje'}   onClick={() => toggle('vence_hoje')}   neutralWhen={counts.vence_hoje === 0} />
-        <KpiCard risco="vence_semana" value={counts.vence_semana} active={filtro === 'vence_semana'} onClick={() => toggle('vence_semana')} neutralWhen={counts.vence_semana === 0} />
-
-        {/* Total — reset */}
-        <button
-          onClick={() => setFiltro(null)}
-          style={{
-            background: filtro === null ? 'rgba(241,245,249,0.06)' : '#0f172a',
-            borderRadius: 12,
-            border: `1px solid ${filtro === null ? '#475569' : '#1e293b'}`,
-            padding: '18px 22px',
-            textAlign: 'left',
-            cursor: 'pointer',
-            outline: 'none',
-            boxShadow: filtro === null ? '0 0 0 1px #47556940' : 'none',
-          }}
-        >
-          <p style={{ fontSize: 12, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Total em aberto</p>
-          <p style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', letterSpacing: '-1px' }}>{rows.length}</p>
-        </button>
+      {/* Filtros */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
+        {RISK_ORDER.filter((r) => counts[r] > 0).map((r) => {
+          const cfg = RISCO_CFG[r]
+          return (
+            <FilterBadge
+              key={r}
+              label={cfg.filterLabel}
+              value={counts[r]}
+              color={cfg.filterColor}
+              bg={cfg.filterBg}
+              active={filtro === r}
+              onClick={() => toggle(r)}
+            />
+          )
+        })}
       </div>
 
       {/* Groups */}
@@ -149,36 +144,6 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
           <p style={{ fontSize: 13 }}>Contratos ativos aparecerão aqui quando houver locações em andamento.</p>
         </div>
       )}
-
-      {filtro && rows.filter((r) => r._risco === filtro).length === 0 && (
-        <div style={{ textAlign: 'center', padding: '60px 0', color: '#475569' }}>
-          <p style={{ fontSize: 13 }}>Nenhum contrato nessa categoria.{' '}
-            <button onClick={() => setFiltro(null)} style={{ color: '#60a5fa', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, textDecoration: 'underline' }}>Ver todos</button>
-          </p>
-        </div>
-      )}
     </main>
-  )
-}
-
-function KpiCard({ risco, value, active, onClick, neutralWhen }: {
-  risco: RiskLevel; value: number; active: boolean; onClick: () => void; neutralWhen: boolean
-}) {
-  const cfg = RISCO_CFG[risco]
-  const color = neutralWhen ? '#f1f5f9' : cfg.color
-  const bg    = neutralWhen && !active ? '#0f172a' : active ? cfg.kpiBg.replace('0.08', '0.14').replace('0.06', '0.12') : cfg.kpiBg
-  const border = active ? cfg.color : neutralWhen ? '#1e293b' : cfg.kpiBorder
-
-  return (
-    <button
-      onClick={onClick}
-      style={{ background: bg, borderRadius: 12, border: `1px solid ${border}`, padding: '18px 22px', textAlign: 'left', cursor: 'pointer', outline: 'none', boxShadow: active ? `0 0 0 1px ${cfg.color}30` : 'none', transition: 'border-color 0.15s, box-shadow 0.15s' }}
-    >
-      <p style={{ fontSize: 12, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>
-        {cfg.label === 'Vence em breve' ? 'Vencem em 7 dias' : cfg.label}
-        {active && <span style={{ fontSize: 10, color: cfg.color }}> ✕</span>}
-      </p>
-      <p style={{ fontSize: 32, fontWeight: 800, color, lineHeight: 1, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', letterSpacing: '-1px' }}>{value}</p>
-    </button>
   )
 }

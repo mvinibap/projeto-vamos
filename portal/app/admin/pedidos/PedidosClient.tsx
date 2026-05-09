@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { FilterBadge } from '@/components/FilterBadge'
 
 type PedidoStatus = 'novo' | 'em_analise' | 'contrato_enviado' | 'assinado' | 'ativo' | 'rejeitado'
 
@@ -17,13 +18,13 @@ export type PedidoRow = {
   equipamento_nome: string | null
 }
 
-const STATUS_CONFIG: Record<PedidoStatus, { label: string; bg: string; color: string; pill: string }> = {
-  novo:             { label: 'Novo',             bg: '#1d4ed8', color: '#fff', pill: 'rgba(29,78,216,0.15)' },
-  em_analise:       { label: 'Em análise',       bg: '#92400e', color: '#fff', pill: 'rgba(146,64,14,0.15)' },
-  contrato_enviado: { label: 'Contrato enviado', bg: '#6d28d9', color: '#fff', pill: 'rgba(109,40,217,0.15)' },
-  assinado:         { label: 'Assinado',         bg: '#3730a3', color: '#fff', pill: 'rgba(55,48,163,0.15)' },
-  ativo:            { label: 'Ativo',            bg: '#15803d', color: '#fff', pill: 'rgba(21,128,61,0.15)'  },
-  rejeitado:        { label: 'Rejeitado',        bg: '#991b1b', color: '#fff', pill: 'rgba(153,27,27,0.15)' },
+const STATUS_CONFIG: Record<PedidoStatus, { label: string; pillBg: string; pillColor: string; filterColor: string; filterBg: string }> = {
+  novo:             { label: 'Novo',             pillBg: '#1d4ed8', pillColor: '#fff', filterColor: '#60a5fa', filterBg: 'rgba(29,78,216,0.1)'   },
+  em_analise:       { label: 'Em análise',       pillBg: '#92400e', pillColor: '#fff', filterColor: '#fb923c', filterBg: 'rgba(146,64,14,0.1)'   },
+  contrato_enviado: { label: 'Contrato enviado', pillBg: '#6d28d9', pillColor: '#fff', filterColor: '#c084fc', filterBg: 'rgba(109,40,217,0.1)'  },
+  assinado:         { label: 'Assinado',         pillBg: '#3730a3', pillColor: '#fff', filterColor: '#818cf8', filterBg: 'rgba(55,48,163,0.1)'   },
+  ativo:            { label: 'Ativo',            pillBg: '#15803d', pillColor: '#fff', filterColor: '#4ade80', filterBg: 'rgba(21,128,61,0.1)'   },
+  rejeitado:        { label: 'Rejeitado',        pillBg: '#991b1b', pillColor: '#fff', filterColor: '#f87171', filterBg: 'rgba(153,27,27,0.1)'   },
 }
 
 const STATUS_ORDER: PedidoStatus[] = ['novo', 'em_analise', 'contrato_enviado', 'assinado', 'ativo', 'rejeitado']
@@ -63,34 +64,20 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
         </div>
       </div>
 
-      {/* Status pills — clicáveis */}
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
+      {/* Filtros */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
         {STATUS_ORDER.filter((s) => counts[s] && counts[s]! > 0).map((s) => {
           const cfg = STATUS_CONFIG[s]
-          const active = filtro === s
           return (
-            <button
+            <FilterBadge
               key={s}
+              label={cfg.label}
+              value={counts[s]!}
+              color={cfg.filterColor}
+              bg={cfg.filterBg}
+              active={filtro === s}
               onClick={() => toggle(s)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                background: active ? cfg.pill : '#0f172a',
-                border: `1px solid ${active ? cfg.bg : '#1e293b'}`,
-                borderRadius: 8,
-                padding: '6px 12px',
-                cursor: 'pointer',
-                outline: 'none',
-                boxShadow: active ? `0 0 0 1px ${cfg.bg}60` : 'none',
-                transition: 'border-color 0.15s, box-shadow 0.15s',
-              }}
-            >
-              <span style={{ width: 8, height: 8, borderRadius: 2, background: cfg.bg, flexShrink: 0, display: 'block' }} />
-              <span style={{ fontSize: 12, color: active ? '#e2e8f0' : '#94a3b8' }}>{cfg.label}</span>
-              <span style={{ fontSize: 12, fontWeight: 700, color: active ? '#f8fafc' : '#f1f5f9' }}>{counts[s]}</span>
-              {active && <span style={{ fontSize: 10, color: '#94a3b8', marginLeft: 2 }}>✕</span>}
-            </button>
+            />
           )
         })}
       </div>
@@ -132,7 +119,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
                     {new Date(p.data_inicio).toLocaleDateString('pt-BR')} – {new Date(p.data_fim).toLocaleDateString('pt-BR')}
                   </td>
                   <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 9999, background: st.bg, color: st.color }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 9999, background: st.pillBg, color: st.pillColor }}>
                       {st.label}
                     </span>
                   </td>
