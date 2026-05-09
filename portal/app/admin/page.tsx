@@ -1,6 +1,8 @@
+import React from 'react'
 import { supabase, type Pedido } from '@/lib/supabase'
 import { simularScoreCNPJ } from '@/lib/cnpj'
 import AnalyticsCharts from '@/components/AnalyticsCharts'
+import KPIChart from '@/components/KPIChart'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -107,172 +109,133 @@ export default async function AdminDashboard() {
 
   const totalValorEmRisco = valorVencido + valorVenceHoje
 
+  const hasAlerts = novos.length > 0 || pedidosEmRisco.length > 0 || totalInadimplencia > 0
+
   return (
-    <main style={{ padding: '32px 32px 64px' }}>
-      {/* Page title */}
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
+    <main style={{ padding: '28px 32px 64px' }}>
+
+      {/* Título */}
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 3 }}>
           Dashboard
         </h1>
-        <p style={{ fontSize: 13, color: '#475569' }}>Visão geral da operação em tempo real</p>
+        <p style={{ fontSize: 13, color: '#64748b' }}>Visão geral da operação</p>
       </div>
 
-      {/* Alertas de ação rápida */}
-      {(novos.length > 0 || pedidosEmRisco.length > 0) && (
-        <div style={{ display: 'flex', gap: 12, marginBottom: 28, flexWrap: 'wrap' }}>
+      {/* ZONA 1 — Alert strip */}
+      {hasAlerts && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 11, color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.8px', flexShrink: 0 }}>
+            Atenção
+          </span>
           {novos.length > 0 && (
-            <Link href="/admin/triagem" style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              background: 'rgba(222,28,34,0.08)', border: '1px solid rgba(222,28,34,0.25)',
-              borderRadius: 10, padding: '12px 16px', textDecoration: 'none',
-              flex: '1 1 240px',
-            }}>
-              <span style={{ fontSize: 20 }}>⚡</span>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#f87171', marginBottom: 2 }}>
-                  {novos.length} pedido{novos.length > 1 ? 's' : ''} aguardando triagem
-                </p>
-                <p style={{ fontSize: 11, color: '#64748b' }}>Clique para abrir a fila →</p>
-              </div>
+            <Link href="/admin/triagem" style={pillStyle('blue')}>
+              <span style={dotStyle} />
+              {novos.length} pedido{novos.length > 1 ? 's' : ''} aguardando triagem →
+            </Link>
+          )}
+          {venceHoje.length > 0 && (
+            <Link href="/admin/inadimplencia" style={pillStyle('orange')}>
+              <span style={dotStyle} />
+              {venceHoje.length} contrato{venceHoje.length > 1 ? 's' : ''} vence hoje →
+            </Link>
+          )}
+          {vencidos.length > 0 && (
+            <Link href="/admin/inadimplencia" style={pillStyle('red')}>
+              <span style={dotStyle} />
+              {vencidos.length} contrato{vencidos.length > 1 ? 's' : ''} vencido{vencidos.length > 1 ? 's' : ''} →
             </Link>
           )}
           {pedidosEmRisco.length > 0 && (
-            <Link href="/admin/triagem" style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              background: 'rgba(234,179,8,0.06)', border: '1px solid rgba(234,179,8,0.2)',
-              borderRadius: 10, padding: '12px 16px', textDecoration: 'none',
-              flex: '1 1 240px',
-            }}>
-              <span style={{ fontSize: 20 }}>⏳</span>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#facc15', marginBottom: 2 }}>
-                  {pedidosEmRisco.length} aguardando há +2 dias
-                </p>
-                <p style={{ fontSize: 11, color: '#64748b' }}>Risco de perda de negócio →</p>
-              </div>
-            </Link>
-          )}
-          {totalInadimplencia > 0 && (
-            <Link href="/admin/inadimplencia" style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.25)',
-              borderRadius: 10, padding: '12px 16px', textDecoration: 'none',
-              flex: '1 1 240px',
-            }}>
-              <span style={{ fontSize: 20 }}>🚨</span>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#f87171', marginBottom: 2 }}>
-                  {vencidos.length > 0
-                    ? `${vencidos.length} contrato${vencidos.length > 1 ? 's' : ''} vencido${vencidos.length > 1 ? 's' : ''}`
-                    : `${venceHoje.length} contrato${venceHoje.length > 1 ? 's' : ''} vence hoje`}
-                </p>
-                <p style={{ fontSize: 11, color: '#64748b' }}>Ver inadimplência →</p>
-              </div>
+            <Link href="/admin/triagem" style={pillStyle('yellow')}>
+              <span style={dotStyle} />
+              {pedidosEmRisco.length} aguardando há +2 dias →
             </Link>
           )}
         </div>
       )}
 
-      {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 28 }}>
-        <KPI label="Total de pedidos" value={pedidos.length} />
-        <KPI label="Aguardando triagem" value={novos.length} highlight={novos.length > 0} />
-        <KPI label="Contratos emitidos" value={contratos} />
-        <KPI label="Locações ativas" value={ativos} />
+      {/* Performance */}
+      <p style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
+        Performance
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
+        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
+          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
+          <p style={{ fontSize: 30, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+            {taxaAprovacao}%
+          </p>
+        </div>
+        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
+          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
+          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+            {ticketMedio ? `R$ ${ticketMedio.toLocaleString('pt-BR')}` : '—'}
+          </p>
+        </div>
+        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
+          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
+          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+            {valorAtivo > 0 ? `R$ ${valorAtivo.toLocaleString('pt-BR')}` : '—'}
+          </p>
+        </div>
       </div>
 
-      {/* Financial Health */}
-      <section style={{ marginBottom: 28 }}>
-        <h2 style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 14 }}>
-          Saúde Financeira & Inadimplência
-        </h2>
+      {/* Divider */}
+      <div style={{ height: 1, background: '#131e2e', marginBottom: 28 }} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 20 }}>
-          <div style={{ background: vencidos.length > 0 ? 'rgba(239,68,68,0.08)' : '#0f172a', borderRadius: 12, border: `1px solid ${vencidos.length > 0 ? 'rgba(239,68,68,0.3)' : '#1e293b'}`, padding: '16px' }}>
-            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Vencidos</p>
-            <p style={{ fontSize: 28, fontWeight: 800, color: vencidos.length > 0 ? '#f87171' : '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {vencidos.length}
-            </p>
-            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
-              {valorVencido > 0 ? `R$ ${(valorVencido / 1000).toFixed(0)}k` : '—'}
-            </p>
-          </div>
+      {/* KPI Charts lado a lado */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 28 }}>
+        <KPIChart
+          title="Visão geral de pedidos"
+          items={[
+            { label: 'Aguardando triagem', color: '#1d4ed8', value: statusMap['novo']             ?? 0 },
+            { label: 'Em análise',         color: '#c4b5fd', value: statusMap['em_analise']       ?? 0 },
+            { label: 'Contrato enviado',   color: '#8b5cf6', value: statusMap['contrato_enviado'] ?? 0 },
+            { label: 'Assinado',           color: '#5b21b6', value: statusMap['assinado']         ?? 0 },
+            { label: 'Ativo',              color: '#15803d', value: statusMap['ativo']            ?? 0 },
+            { label: 'Rejeitado',          color: '#334155', value: statusMap['rejeitado']        ?? 0 },
+          ]}
+          footer={`${pedidos.length} pedidos no total`}
+        />
+        <KPIChart
+          title="Saúde dos contratos ativos"
+          items={[
+            { label: 'Vencidos',         color: '#f87171', value: vencidos.length },
+            { label: 'Vence hoje',       color: '#fb923c', value: venceHoje.length },
+            { label: 'Vence em 7 dias',  color: '#facc15', value: venceSemana.length },
+            { label: 'Em dia',           color: '#15803d', value: contratoOk.length },
+          ]}
+          footer={`${pedidosContrato.length} contratos ativos`}
+        />
+      </div>
 
-          <div style={{ background: venceHoje.length > 0 ? 'rgba(251,146,60,0.06)' : '#0f172a', borderRadius: 12, border: `1px solid ${venceHoje.length > 0 ? 'rgba(251,146,60,0.25)' : '#1e293b'}`, padding: '16px' }}>
-            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Vence hoje</p>
-            <p style={{ fontSize: 28, fontWeight: 800, color: venceHoje.length > 0 ? '#fb923c' : '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {venceHoje.length}
-            </p>
-            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
-              {valorVenceHoje > 0 ? `R$ ${(valorVenceHoje / 1000).toFixed(0)}k` : '—'}
-            </p>
-          </div>
+      {/* Divider */}
+      <div style={{ height: 1, background: '#131e2e', marginBottom: 28 }} />
 
-          <div style={{ background: venceSemana.length > 0 ? 'rgba(234,179,8,0.06)' : '#0f172a', borderRadius: 12, border: `1px solid ${venceSemana.length > 0 ? 'rgba(234,179,8,0.2)' : '#1e293b'}`, padding: '16px' }}>
-            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Vence em 7d</p>
-            <p style={{ fontSize: 28, fontWeight: 800, color: venceSemana.length > 0 ? '#facc15' : '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {venceSemana.length}
-            </p>
-            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
-              {pedidosContrato.length > 0 ? `${Math.round((venceSemana.length / pedidosContrato.length) * 100)}%` : '—'}
-            </p>
-          </div>
+      {/* Análise operacional */}
+      <AnalyticsCharts statusMap={statusMap} topEstados={topEstados} alocacao={alocacao} />
 
-          <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '16px' }}>
-            <p style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontWeight: 500 }}>Em risco</p>
-            <p style={{ fontSize: 28, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {totalInadimplencia}
-            </p>
-            <p style={{ fontSize: 10, color: '#64748b', marginTop: 6 }}>
-              {pedidosContrato.length > 0 ? Math.round((totalInadimplencia / pedidosContrato.length) * 100) : 0}% do total
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Performance */}
-      <section style={{ marginBottom: 28 }}>
-        <h2 style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 14 }}>
-          Análise de Performance
-        </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 20 }}>
-          <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
-            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
-            <p style={{ fontSize: 36, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {taxaAprovacao}%
-            </p>
-          </div>
-          <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
-            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
-            <p style={{ fontSize: 36, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {ticketMedio ? `R$ ${ticketMedio.toLocaleString('pt-BR')}` : '—'}
-            </p>
-          </div>
-          <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px 24px' }}>
-            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
-            <p style={{ fontSize: valorAtivo > 0 ? 28 : 36, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
-              {valorAtivo > 0 ? `R$ ${valorAtivo.toLocaleString('pt-BR')}` : '—'}
-            </p>
-          </div>
-        </div>
-
-        <AnalyticsCharts statusMap={statusMap} topEstados={topEstados} alocacao={alocacao} />
-      </section>
     </main>
   )
 }
 
-function KPI({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) {
-  return (
-    <div style={{
-      borderRadius: 12, padding: '20px 24px',
-      border: `1px solid ${highlight ? 'rgba(222,28,34,0.3)' : '#1e293b'}`,
-      background: highlight ? 'rgba(222,28,34,0.08)' : '#0f172a',
-    }}>
-      <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>{label}</p>
-      <p style={{ fontSize: 36, fontWeight: 800, color: highlight ? RED : '#f1f5f9', lineHeight: 1, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', letterSpacing: '-1px' }}>
-        {value}
-      </p>
-    </div>
-  )
+
+
+const pillStyle = (color: 'red' | 'orange' | 'yellow' | 'blue'): React.CSSProperties => {
+  const map = {
+    blue:   { background: 'rgba(96,165,250,0.09)',  border: '1px solid rgba(96,165,250,0.28)',  color: '#60a5fa' },
+    red:    { background: 'rgba(222,28,34,0.1)',    border: '1px solid rgba(222,28,34,0.3)',    color: '#f87171' },
+    orange: { background: 'rgba(251,146,60,0.08)',  border: '1px solid rgba(251,146,60,0.25)', color: '#fb923c' },
+    yellow: { background: 'rgba(250,204,21,0.07)',  border: '1px solid rgba(250,204,21,0.2)',  color: '#facc15' },
+  }
+  return {
+    display: 'inline-flex', alignItems: 'center', gap: 6,
+    padding: '5px 10px 5px 8px', borderRadius: 6,
+    fontSize: 12, fontWeight: 600, textDecoration: 'none',
+    ...map[color],
+  }
+}
+
+const dotStyle: React.CSSProperties = {
+  width: 6, height: 6, borderRadius: '50%', background: 'currentColor', flexShrink: 0,
 }

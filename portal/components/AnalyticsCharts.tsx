@@ -98,26 +98,10 @@ function StackedBar({ slices, subtitle }: { slices: Slice[]; subtitle?: string }
 
 // ── Componente principal ─────────────────────────────────────────────────────
 
-const STATUS_CFG: { key: string; label: string; color: string }[] = [
-  { key: 'novo',             label: 'Novo',             color: '#1d4ed8' },
-  { key: 'em_analise',       label: 'Em análise',       color: '#d97706' },
-  { key: 'contrato_enviado', label: 'Contrato enviado', color: '#7c3aed' },
-  { key: 'assinado',         label: 'Assinado',         color: '#3730a3' },
-  { key: 'ativo',            label: 'Ativo',            color: '#15803d' },
-  { key: 'rejeitado',        label: 'Rejeitado',        color: '#dc2626' },
-]
-
 const ESTADO_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#f97316', '#6366f1']
 
-export default function AnalyticsCharts({ statusMap, topEstados, alocacao }: Props) {
+export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alocacao }: Props) {
   const [view, setView] = useState<View>('barras')
-
-  // Prepara slices para cada gadget
-  const totalPedidos = Object.values(statusMap).reduce((a, b) => a + b, 0)
-  const funilSlices = buildSlices(
-    STATUS_CFG.map(s => ({ label: s.label, color: s.color, count: statusMap[s.key] ?? 0 })),
-    totalPedidos
-  )
 
   const totalEstados = topEstados.reduce((s, [, n]) => s + n, 0)
   const estadoSlices = buildSlices(
@@ -132,11 +116,11 @@ export default function AnalyticsCharts({ statusMap, topEstados, alocacao }: Pro
   ], alocacao.total)
 
   return (
-    <div style={{ background: '#0a111e', border: '1px solid #1e293b', borderRadius: 14, padding: '18px 20px' }}>
-      {/* Header do grupo com toggle único */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
-        <p style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
-          Visão geral da operação
+    <div>
+      {/* Header com toggle */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+          Análise operacional
         </p>
         <div style={{ display: 'flex', background: '#1e293b', borderRadius: 6, padding: 2, gap: 2 }}>
           {(['barras', 'pizza'] as const).map((v) => (
@@ -153,11 +137,10 @@ export default function AnalyticsCharts({ statusMap, topEstados, alocacao }: Pro
         </div>
       </div>
 
-      {/* Grid dos 3 gadgets */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-        {/* Top Estados */}
-        <div style={{ background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b', padding: '16px 18px' }}>
-          <p style={{ fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 14 }}>
+      {/* Grid dos 2 charts */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px' }}>
+          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 16 }}>
             Top estados
           </p>
           {view === 'barras'
@@ -165,19 +148,8 @@ export default function AnalyticsCharts({ statusMap, topEstados, alocacao }: Pro
             : <PieChart slices={estadoSlices} />}
         </div>
 
-        {/* Funil de Status */}
-        <div style={{ background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b', padding: '16px 18px' }}>
-          <p style={{ fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 14 }}>
-            Funil de status
-          </p>
-          {view === 'barras'
-            ? <StackedBar slices={funilSlices} />
-            : <PieChart slices={funilSlices} />}
-        </div>
-
-        {/* Alocação de Equipamentos */}
-        <div style={{ background: '#0f172a', borderRadius: 10, border: '1px solid #1e293b', padding: '16px 18px' }}>
-          <p style={{ fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 14 }}>
+        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px' }}>
+          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 16 }}>
             Alocação de equipamentos
           </p>
           {view === 'barras'
