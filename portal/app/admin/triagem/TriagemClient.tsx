@@ -139,7 +139,7 @@ export default function TriagemClient({
             <span style={{ color: '#de1c22' }}>⚡</span> Aguardando análise ({novosFiltrados.length})
           </h2>
           <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 60px 56px 110px 72px auto', padding: '8px 16px', borderBottom: '1px solid #1e293b' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 60px 56px 110px 72px auto', padding: '8px 16px', borderBottom: '1px solid #1e293b', borderLeft: '3px solid transparent' }}>
               {['Score', 'Empresa', 'Equipamento', 'Estado', 'Dias', 'Valor est.', 'Aguarda', ''].map((h) => (
                 <span key={h} style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{h}</span>
               ))}
