@@ -60,11 +60,33 @@ export default async function AdminDashboard() {
   pedidos.forEach((p) => { statusMap[p.status] = (statusMap[p.status] || 0) + 1 })
 
   // Pedidos em risco (aguardando triagem há mais de 2 dias)
-  const hoje = Date.now()
+  const hojeDate = new Date()
+  const hojeMs = hojeDate.getTime()
+  const hoje = hojeMs
   const pedidosEmRisco = novos.filter((p) => {
     const idadeDias = Math.round((hoje - new Date(p.created_at).getTime()) / (1000 * 60 * 60 * 24))
     return idadeDias >= 2
   })
+
+  // Inadimplência: classificar contratos ativos/assinados/contrato_enviado
+  const pedidosContrato = pedidos.filter((p) =>
+    ['ativo', 'assinado', 'contrato_enviado'].includes(p.status)
+  )
+
+  const classifyRisco = (dataFim: string) => {
+    const diffDias = Math.round((new Date(dataFim).getTime() - hojeMs) / (1000 * 60 * 60 * 24))
+    if (diffDias < 0)  return 'vencido'
+    if (diffDias === 0) return 'vence_hoje'
+    if (diffDias <= 7) return 'vence_semana'
+    return 'ok'
+  }
+
+  const vencidos     = pedidosContrato.filter((p) => classifyRisco(p.data_fim) === 'vencido')
+  const venceHoje    = pedidosContrato.filter((p) => classifyRisco(p.data_fim) === 'vence_hoje')
+  const venceSemana  = pedidosContrato.filter((p) => classifyRisco(p.data_fim) === 'vence_semana')
+  const contratoOk   = pedidosContrato.filter((p) => classifyRisco(p.data_fim) === 'ok')
+
+  const totalInadimplencia = vencidos.length + venceHoje.length
 
   return (
     <main style={{ padding: '32px 32px 64px' }}>
@@ -108,6 +130,24 @@ export default async function AdminDashboard() {
                   {pedidosEmRisco.length} aguardando há +2 dias
                 </p>
                 <p style={{ fontSize: 11, color: '#64748b' }}>Risco de perda de negócio →</p>
+              </div>
+            </Link>
+          )}
+          {totalInadimplencia > 0 && (
+            <Link href="/admin/inadimplencia" style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.25)',
+              borderRadius: 10, padding: '12px 16px', textDecoration: 'none',
+              flex: '1 1 240px',
+            }}>
+              <span style={{ fontSize: 20 }}>🚨</span>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#f87171', marginBottom: 2 }}>
+                  {vencidos.length > 0
+                    ? `${vencidos.length} contrato${vencidos.length > 1 ? 's' : ''} vencido${vencidos.length > 1 ? 's' : ''}`
+                    : `${venceHoje.length} contrato${venceHoje.length > 1 ? 's' : ''} vence hoje`}
+                </p>
+                <p style={{ fontSize: 11, color: '#64748b' }}>Ver inadimplência →</p>
               </div>
             </Link>
           )}

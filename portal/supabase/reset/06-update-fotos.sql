@@ -1,5 +1,5 @@
 -- Atualiza foto_url com imagens reais do site da VAMOS
--- Execute no SQL Editor do Supabase
+-- Execute apos os inserts de equipamentos e frota
 
 -- Retroescavadeiras (SVG oficial da VAMOS)
 UPDATE equipamentos
@@ -11,7 +11,7 @@ UPDATE equipamentos
 SET foto_url = 'https://apisite.vamos.com.br/uploads/Trator_27d227a826.png?format=webp&quality=80&w=800'
 WHERE categoria = 'trator';
 
--- Caminhões (fotos reais do catálogo VAMOS)
+-- Caminhoes (fotos reais do catalogo VAMOS)
 UPDATE equipamentos
 SET foto_url = 'https://apisite.vamos.com.br/uploads/normal_KV_Graneleiro_28bdba18db_cfc4fe62ad.jpg?format=webp&quality=80&w=800'
 WHERE nome LIKE 'Volvo FMX 440 Basculante%';
@@ -43,10 +43,12 @@ UPDATE equipamentos
 SET foto_url = 'https://apisite.vamos.com.br/uploads/TRATOR_DE_ESTEIRA_dd9621efa2_f1d3c9085c.png?format=webp&quality=80&w=800'
 WHERE categoria = 'compactador';
 
--- Carregadeiras e equipamentos de movimentação (foto real VAMOS)
+-- Carregadeiras e equipamentos de movimentacao (foto real VAMOS)
 UPDATE equipamentos
 SET foto_url = 'https://apisite.vamos.com.br/uploads/normal_938_Pa_carregadeira_5685049dca_f694855b48.jpg?format=webp&quality=80&w=800'
 WHERE categoria = 'outro';
 
 -- Confirma
-SELECT nome, categoria, LEFT(foto_url, 60) AS foto_preview FROM equipamentos ORDER BY categoria, nome;
+SELECT nome, categoria, LEFT(foto_url, 60) AS foto_preview
+FROM equipamentos
+ORDER BY categoria, nome;

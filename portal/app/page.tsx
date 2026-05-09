@@ -17,11 +17,11 @@ const CATEGORIAS = [
 ]
 
 async function getEquipamentos(categoria?: string, estado?: string): Promise<Equipamento[]> {
-  let query = supabase.from('equipamentos').select('*').order('nome')
+  let query = supabase.from('equipamentos_catalogo').select('*').order('nome')
   if (categoria && categoria !== 'todos') query = query.eq('categoria', categoria)
   if (estado) query = query.eq('estado', estado)
   const { data } = await query
-  return data ?? []
+  return (data ?? []) as Equipamento[]
 }
 
 export default async function Home({
