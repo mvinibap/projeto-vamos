@@ -136,8 +136,9 @@ export default function TriagemClient({
       {/* Novos — triage */}
       {mostrarNovos && novosFiltrados.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <h2 style={{ fontSize: 11, fontWeight: 700, color: '#f1f5f9', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
-            <span style={{ color: '#de1c22' }}>⚡</span> Aguardando análise ({novosFiltrados.length})
+          <h2 style={{ fontSize: 11, fontWeight: 700, color: '#f1f5f9', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span aria-hidden style={{ width: 6, height: 6, borderRadius: 9999, background: '#de1c22', display: 'inline-block', flexShrink: 0 }} />
+            Aguardando análise ({novosFiltrados.length})
           </h2>
           <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 60px 56px 110px 72px auto', padding: '8px 16px', borderBottom: '1px solid #1e293b', borderLeft: '3px solid transparent' }}>
