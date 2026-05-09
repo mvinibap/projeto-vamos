@@ -59,18 +59,21 @@ WHERE nome_empresa = 'Estradas e Pontes Construções'
   AND email = 'camila@estradasepon.com.br';
 
 -- PASSO 3: Verificação — deve mostrar dados em todos os grupos
-SELECT
-  CASE
-    WHEN data_fim < CURRENT_DATE THEN 'vencido'
-    WHEN data_fim = CURRENT_DATE THEN 'vence_hoje'
-    WHEN data_fim <= CURRENT_DATE + INTERVAL '7 days' THEN 'vence_semana'
-    ELSE 'ok'
-  END AS risco,
-  COUNT(*) AS total,
-  STRING_AGG(nome_empresa, ', ' ORDER BY data_fim) AS empresas
-FROM pedidos
-WHERE status IN ('ativo', 'assinado', 'contrato_enviado')
-GROUP BY risco
+SELECT *
+FROM (
+  SELECT
+    CASE
+      WHEN data_fim < CURRENT_DATE THEN 'vencido'
+      WHEN data_fim = CURRENT_DATE THEN 'vence_hoje'
+      WHEN data_fim <= CURRENT_DATE + INTERVAL '7 days' THEN 'vence_semana'
+      ELSE 'ok'
+    END AS risco,
+    COUNT(*) AS total,
+    STRING_AGG(nome_empresa, ', ' ORDER BY data_fim) AS empresas
+  FROM pedidos
+  WHERE status IN ('ativo', 'assinado', 'contrato_enviado')
+  GROUP BY 1
+) t
 ORDER BY
   CASE risco
     WHEN 'vencido' THEN 1
