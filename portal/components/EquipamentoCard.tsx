@@ -3,63 +3,64 @@
 import Link from 'next/link'
 import type { Equipamento } from '@/lib/supabase'
 
-const STATUS_LABEL: Record<Equipamento['status'], { label: string; color: string }> = {
-  disponivel: { label: 'Disponível', color: 'bg-green-100 text-green-700' },
-  reservado: { label: 'Reservado', color: 'bg-yellow-100 text-yellow-700' },
-  indisponivel: { label: 'Indisponível', color: 'bg-red-100 text-red-700' },
+const STATUS_CONFIG: Record<Equipamento['status'], { label: string; style: React.CSSProperties }> = {
+  disponivel:   { label: 'Disponível',   style: { background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0' } },
+  reservado:    { label: 'Reservado',    style: { background: '#fefce8', color: '#b45309', border: '1px solid #fde68a' } },
+  indisponivel: { label: 'Indisponível', style: { background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' } },
 }
 
 export default function EquipamentoCard({ equipamento: eq }: { equipamento: Equipamento }) {
-  const status = STATUS_LABEL[eq.status]
+  const status = STATUS_CONFIG[eq.status]
 
   return (
-    <Link href={`/equipamentos/${eq.id}`} className="group block">
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+    <Link href={`/equipamentos/${eq.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+      <div
+        style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', transition: 'box-shadow .2s, transform .2s', cursor: 'pointer' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 6px 24px rgba(0,0,0,0.09)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'; (e.currentTarget as HTMLDivElement).style.transform = 'none' }}
+      >
         {/* Foto */}
-        <div className="relative h-44 bg-gray-100 overflow-hidden">
-          {/* Emoji fallback — sempre atrás */}
-          <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-5xl">
+        <div style={{ position: 'relative', height: 168, background: 'var(--surface)', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48, color: '#d1d5db' }}>
             🏗️
           </div>
-          {eq.foto_url ? (
+          {eq.foto_url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={eq.foto_url}
               alt={eq.nome}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                target.style.display = 'none'
-              }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
-          ) : null}
+          )}
+          <span style={{ position: 'absolute', top: 10, right: 10, fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 9999, ...status.style }}>
+            {status.label}
+          </span>
         </div>
 
         {/* Conteúdo */}
-        <div className="p-4">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-orange-600 transition-colors">
-              {eq.nome}
-            </h3>
-            <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${status.color}`}>
-              {status.label}
-            </span>
-          </div>
-
-          <p className="text-xs text-gray-500 mb-3 capitalize">{eq.categoria.replace('_', ' ')} · {eq.estado}</p>
+        <div style={{ padding: '14px 16px 16px' }}>
+          <p className="font-display" style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3, marginBottom: 3 }}>
+            {eq.nome}
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', textTransform: 'capitalize', marginBottom: 12 }}>
+            {eq.categoria.replace('_', ' ')} · {eq.estado}
+          </p>
 
           {eq.preco_dia ? (
-            <div className="border-t border-gray-100 pt-3">
-              <p className="text-xs text-gray-400">A partir de</p>
-              <p className="font-bold text-orange-500">
-                R$ {eq.preco_dia.toLocaleString('pt-BR')}<span className="font-normal text-gray-500 text-sm">/dia</span>
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+              <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 1 }}>A partir de</p>
+              <p className="font-display" style={{ fontSize: 20, fontWeight: 800, color: 'var(--red)', letterSpacing: '-0.5px', lineHeight: 1.1 }}>
+                R$ {eq.preco_dia.toLocaleString('pt-BR')}<span style={{ fontSize: 13, fontWeight: 400, color: 'var(--muted)' }}>/dia</span>
               </p>
               {eq.preco_mes && (
-                <p className="text-xs text-gray-500">ou R$ {eq.preco_mes.toLocaleString('pt-BR')}/mês</p>
+                <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                  ou R$ {eq.preco_mes.toLocaleString('pt-BR')}/mês
+                </p>
               )}
             </div>
           ) : (
-            <p className="text-sm text-gray-400 border-t border-gray-100 pt-3">Consulte o preço</p>
+            <p style={{ fontSize: 13, color: 'var(--muted)', borderTop: '1px solid var(--border)', paddingTop: 12 }}>Consulte o preço</p>
           )}
         </div>
       </div>

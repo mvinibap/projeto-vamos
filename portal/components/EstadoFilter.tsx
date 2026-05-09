@@ -24,7 +24,7 @@ export default function EstadoFilter({ estadoAtivo, categoria }: { estadoAtivo: 
     <select
       value={estadoAtivo}
       onChange={handleChange}
-      className="text-sm border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+      style={{ fontSize: 13, border: '1.5px solid var(--border)', borderRadius: 8, padding: '6px 12px', color: 'var(--text)', background: 'var(--bg)', outline: 'none', fontFamily: 'inherit', cursor: 'pointer' }}
     >
       <option value="">Todos os estados</option>
       {ESTADOS_BR.map((uf) => (

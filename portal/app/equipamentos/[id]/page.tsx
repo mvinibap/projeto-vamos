@@ -16,52 +16,63 @@ export default async function EquipamentoPage({ params }: { params: Promise<{ id
   const disponivel = eq.status === 'disponivel'
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: 'var(--surface)' }}>
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
-          <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
+      <header style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: 896, margin: '0 auto', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Link href="/" style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)', textDecoration: 'none' }}>
             ← Voltar
           </Link>
-          <span className="text-xl font-bold text-orange-500">VAMOS</span>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+            <span className="font-display" style={{ background: 'var(--red)', color: '#fff', fontWeight: 800, fontSize: 14, padding: '5px 8px', borderRadius: 4, lineHeight: 1 }}>
+              VAMOS
+            </span>
+          </Link>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          {/* Foto */}
+      <main style={{ maxWidth: 896, margin: '0 auto', padding: '24px 24px 64px' }}>
+        <div style={{ background: 'var(--bg)', borderRadius: 16, border: '1px solid var(--border)', overflow: 'hidden' }}>
+
           <EquipamentoFoto src={eq.foto_url} alt={eq.nome} />
 
-          <div className="p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+          <div style={{ padding: '28px 32px 32px' }}>
+            {/* Título + Preço */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 16, marginBottom: 20 }}>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-1">{eq.nome}</h1>
-                <p className="text-gray-500 capitalize">{eq.categoria.replace('_', ' ')} · {eq.estado}</p>
+                <h1 className="font-display" style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: 4 }}>
+                  {eq.nome}
+                </h1>
+                <p style={{ fontSize: 14, color: 'var(--muted)', textTransform: 'capitalize' }}>
+                  {eq.categoria.replace('_', ' ')} · {eq.estado}
+                </p>
               </div>
-              <div className="text-right shrink-0">
-                {eq.preco_dia && (
-                  <>
-                    <p className="text-sm text-gray-400">A partir de</p>
-                    <p className="text-3xl font-bold text-orange-500">
-                      R$ {eq.preco_dia.toLocaleString('pt-BR')}
-                      <span className="text-lg font-normal text-gray-500">/dia</span>
+              {eq.preco_dia && (
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 2 }}>A partir de</p>
+                  <p className="font-display" style={{ fontSize: 32, fontWeight: 800, color: 'var(--red)', letterSpacing: '-1px', lineHeight: 1 }}>
+                    R$ {eq.preco_dia.toLocaleString('pt-BR')}
+                    <span style={{ fontSize: 16, fontWeight: 400, color: 'var(--muted)' }}>/dia</span>
+                  </p>
+                  {eq.preco_mes && (
+                    <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
+                      ou R$ {eq.preco_mes.toLocaleString('pt-BR')}/mês
                     </p>
-                    {eq.preco_mes && (
-                      <p className="text-sm text-gray-500">ou R$ {eq.preco_mes.toLocaleString('pt-BR')}/mês</p>
-                    )}
-                    <p className="text-xs text-gray-400 mt-1">Frete a consultar</p>
-                  </>
-                )}
-              </div>
+                  )}
+                  <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>Frete a consultar</p>
+                </div>
+              )}
             </div>
 
             {/* Disponibilidade */}
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6 ${
-              disponivel
-                ? 'bg-green-50 text-green-700 border border-green-200'
-                : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
-            }`}>
-              <span className={`w-2 h-2 rounded-full ${disponivel ? 'bg-green-500' : 'bg-yellow-500'}`} />
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '8px 16px', borderRadius: 9999, fontSize: 13, fontWeight: 600, marginBottom: 24,
+              ...(disponivel
+                ? { background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0' }
+                : { background: '#fefce8', color: '#b45309', border: '1px solid #fde68a' })
+            }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: disponivel ? '#16a34a' : '#f59e0b', display: 'block' }} />
               {disponivel
                 ? 'Disponível para locação'
                 : `Reservado${eq.disponivel_a_partir_de ? ` — disponível a partir de ${new Date(eq.disponivel_a_partir_de).toLocaleDateString('pt-BR')}` : ''}`
@@ -70,21 +81,21 @@ export default async function EquipamentoPage({ params }: { params: Promise<{ id
 
             {/* Descrição */}
             {eq.descricao && (
-              <div className="mb-6">
-                <h2 className="font-semibold text-gray-800 mb-2">Sobre o equipamento</h2>
-                <p className="text-gray-600 leading-relaxed">{eq.descricao}</p>
+              <div style={{ marginBottom: 24 }}>
+                <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Sobre o equipamento</h2>
+                <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.7 }}>{eq.descricao}</p>
               </div>
             )}
 
             {/* Specs */}
             {eq.specs && Object.keys(eq.specs).length > 0 && (
-              <div className="mb-8">
-                <h2 className="font-semibold text-gray-800 mb-3">Especificações técnicas</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div style={{ marginBottom: 32 }}>
+                <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Especificações técnicas</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
                   {Object.entries(eq.specs as Record<string, string>).map(([key, value]) => (
-                    <div key={key} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                      <p className="text-xs text-gray-400 capitalize mb-1">{key.replace(/_/g, ' ')}</p>
-                      <p className="font-semibold text-gray-800 text-sm">{value}</p>
+                    <div key={key} style={{ background: 'var(--surface)', borderRadius: 10, padding: 12, border: '1px solid var(--border)' }}>
+                      <p style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'capitalize', marginBottom: 4 }}>{key.replace(/_/g, ' ')}</p>
+                      <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{value}</p>
                     </div>
                   ))}
                 </div>
@@ -92,23 +103,23 @@ export default async function EquipamentoPage({ params }: { params: Promise<{ id
             )}
 
             {/* CTA */}
-            <div className="border-t border-gray-100 pt-6">
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24 }}>
               {disponivel ? (
                 <Link
                   href={`/pedido?equipamento=${eq.id}`}
-                  className="block w-full sm:w-auto sm:inline-block text-center bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl transition-colors text-lg"
+                  style={{ display: 'inline-block', background: 'var(--red)', color: '#fff', fontWeight: 700, fontSize: 16, padding: '14px 32px', borderRadius: 10, textDecoration: 'none' }}
                 >
                   Solicitar Locação
                 </Link>
               ) : (
                 <button
                   disabled
-                  className="block w-full sm:w-auto sm:inline-block text-center bg-gray-200 text-gray-400 font-semibold px-8 py-4 rounded-xl text-lg cursor-not-allowed"
+                  style={{ background: 'var(--border)', color: 'var(--muted)', fontWeight: 700, fontSize: 16, padding: '14px 32px', borderRadius: 10, border: 'none', cursor: 'not-allowed' }}
                 >
                   Equipamento Reservado
                 </button>
               )}
-              <p className="text-xs text-gray-400 mt-3">
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12 }}>
                 Sem pagamento online. Um especialista VAMOS entrará em contato para confirmar o pedido.
               </p>
             </div>
