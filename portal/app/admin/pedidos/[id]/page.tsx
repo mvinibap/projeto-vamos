@@ -38,18 +38,20 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
   const jaProcessado = !['novo', 'em_analise'].includes(pedido.status)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#030712', color: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
-      <header style={{ background: '#0f172a', borderBottom: '1px solid #1e293b', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', gap: 16 }}>
-        <Link href="/admin" style={{ fontSize: 13, color: '#475569', textDecoration: 'none', fontWeight: 500 }}>
-          ← Voltar
-        </Link>
-        <span className="font-display" style={{ background: RED, color: '#fff', fontWeight: 800, fontSize: 14, padding: '5px 8px', borderRadius: 4, lineHeight: 1, letterSpacing: '-0.3px' }}>
-          VAMOS
-        </span>
-        <span style={{ color: '#475569', fontSize: 13, fontWeight: 500 }}>Análise de Pedido</span>
-      </header>
-
-      <main style={{ maxWidth: 1024, margin: '0 auto', padding: '32px 24px 64px' }}>
+    <div>
+      <main style={{ maxWidth: 1024, margin: '0 auto', padding: '32px 32px 64px' }}>
+        {/* Back link + title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+          <Link href="/admin/triagem" style={{ fontSize: 13, color: '#475569', textDecoration: 'none', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 4 }}>
+            ← Triagem
+          </Link>
+          <span style={{ color: '#1e293b' }}>|</span>
+          <Link href="/admin/pedidos" style={{ fontSize: 13, color: '#475569', textDecoration: 'none', fontWeight: 500 }}>
+            Pedidos
+          </Link>
+          <span style={{ color: '#1e293b' }}>/</span>
+          <span style={{ fontSize: 13, color: '#64748b', fontFamily: 'monospace' }}>{pedido.numero_pedido}</span>
+        </div>
         {/* Status atual */}
         {jaProcessado && (
           <div style={{
