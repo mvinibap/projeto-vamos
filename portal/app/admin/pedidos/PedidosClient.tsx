@@ -83,8 +83,8 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
       </div>
 
       {/* Tabela */}
-      <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
-        <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
+      <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: 880, fontSize: 13, borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid #1e293b' }}>
               {['Pedido', 'Empresa', 'Equipamento', 'Estado', 'Período', 'Status', 'Data', ''].map((h) => (

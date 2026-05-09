@@ -86,8 +86,8 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
               <h2 style={{ fontSize: 13, fontWeight: 700, color: cfg.color }}>{cfg.title}</h2>
               <span style={{ fontSize: 11, color: '#475569' }}>{cfg.subtitle}</span>
             </div>
-            <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
-              <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
+            <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflowX: 'auto' }}>
+              <table style={{ width: '100%', minWidth: 880, fontSize: 13, borderCollapse: 'collapse' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #1e293b' }}>
                     {['Empresa', 'Equipamento', 'Score CNPJ', 'Valor', 'Término', 'Situação', ''].map((h) => (
