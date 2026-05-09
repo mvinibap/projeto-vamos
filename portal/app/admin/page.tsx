@@ -11,14 +11,16 @@ async function getPedidos(): Promise<Pedido[]> {
   return data ?? []
 }
 
-const STATUS_CONFIG: Record<Pedido['status'], { label: string; color: string }> = {
-  novo:              { label: 'Novo',              color: 'bg-blue-100 text-blue-700' },
-  em_analise:        { label: 'Em análise',        color: 'bg-yellow-100 text-yellow-700' },
-  contrato_enviado:  { label: 'Contrato enviado',  color: 'bg-purple-100 text-purple-700' },
-  assinado:          { label: 'Assinado',          color: 'bg-indigo-100 text-indigo-700' },
-  ativo:             { label: 'Ativo',             color: 'bg-green-100 text-green-700' },
-  rejeitado:         { label: 'Rejeitado',         color: 'bg-red-100 text-red-700' },
+const STATUS_CONFIG: Record<Pedido['status'], { label: string; bg: string; color: string }> = {
+  novo:              { label: 'Novo',              bg: '#1d4ed8', color: '#fff' },
+  em_analise:        { label: 'Em análise',        bg: '#92400e', color: '#fff' },
+  contrato_enviado:  { label: 'Contrato enviado',  bg: '#6d28d9', color: '#fff' },
+  assinado:          { label: 'Assinado',          bg: '#3730a3', color: '#fff' },
+  ativo:             { label: 'Ativo',             bg: '#15803d', color: '#fff' },
+  rejeitado:         { label: 'Rejeitado',         bg: '#991b1b', color: '#fff' },
 }
+
+const RED = '#de1c22'
 
 export default async function AdminPage() {
   const pedidos = await getPedidos()
@@ -28,21 +30,23 @@ export default async function AdminPage() {
   const contratos = pedidos.filter((p) => ['contrato_enviado', 'assinado', 'ativo'].includes(p.status)).length
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div style={{ minHeight: '100vh', background: '#030712', color: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
       {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-xl font-bold text-orange-400">VAMOS</span>
-          <span className="text-gray-500 text-sm">Painel Operacional</span>
+      <header style={{ background: '#0f172a', borderBottom: '1px solid #1e293b', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span className="font-display" style={{ background: RED, color: '#fff', fontWeight: 800, fontSize: 14, padding: '5px 8px', borderRadius: 4, lineHeight: 1, letterSpacing: '-0.3px' }}>
+            VAMOS
+          </span>
+          <span style={{ color: '#475569', fontSize: 13, fontWeight: 500 }}>Painel Operacional</span>
         </div>
-        <Link href="/" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+        <Link href="/" className="home-header-right" style={{ fontSize: 13, color: '#475569', textDecoration: 'none', fontWeight: 500 }}>
           ← Portal do Cliente
         </Link>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px 64px' }}>
         {/* KPIs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
           <KPI label="Total de pedidos" value={pedidos.length} />
           <KPI label="Aguardando análise" value={novos.length} highlight />
           <KPI label="Contratos emitidos" value={contratos} />
@@ -51,11 +55,11 @@ export default async function AdminPage() {
 
         {/* Fila: pedidos novos */}
         {novos.length > 0 && (
-          <section className="mb-8">
-            <h2 className="text-sm font-semibold text-orange-400 uppercase tracking-wide mb-3">
-              ⚡ Aguardando análise ({novos.length})
+          <section style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: 11, fontWeight: 700, color: '#f1f5f9', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
+              <span style={{ color: RED }}>⚡</span> Aguardando análise ({novos.length})
             </h2>
-            <div className="space-y-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {novos.map((p) => (
                 <PedidoRow key={p.id} pedido={p} destaque />
               ))}
@@ -65,60 +69,90 @@ export default async function AdminPage() {
 
         {/* Todos os pedidos */}
         <section>
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
+          <h2 style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
             Todos os pedidos
           </h2>
-          <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-            <table className="w-full text-sm">
+
+          {/* Tabela — desktop */}
+          <div className="admin-table-wrap" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
+            <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
               <thead>
-                <tr className="border-b border-gray-800 text-gray-400 text-xs uppercase tracking-wide">
-                  <th className="text-left px-4 py-3">Pedido</th>
-                  <th className="text-left px-4 py-3 hidden sm:table-cell">Empresa</th>
-                  <th className="text-left px-4 py-3 hidden md:table-cell">Equipamento</th>
-                  <th className="text-left px-4 py-3 hidden lg:table-cell">Período</th>
-                  <th className="text-left px-4 py-3">Status</th>
-                  <th className="text-left px-4 py-3 hidden sm:table-cell">Data</th>
-                  <th className="px-4 py-3" />
+                <tr style={{ borderBottom: '1px solid #1e293b' }}>
+                  {['Pedido', 'Empresa', 'Equipamento', 'Período', 'Status', 'Data', ''].map((h) => (
+                    <th key={h} style={{ textAlign: 'left', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
-                {pedidos.map((p) => (
-                  <tr key={p.id} className="hover:bg-gray-800/50 transition-colors">
-                    <td className="px-4 py-3 font-mono text-gray-300 text-xs">{p.numero_pedido}</td>
-                    <td className="px-4 py-3 hidden sm:table-cell text-gray-200">{p.nome_empresa}</td>
-                    <td className="px-4 py-3 hidden md:table-cell text-gray-400">
-                      {p.equipamentos?.nome ?? '—'}
-                    </td>
-                    <td className="px-4 py-3 hidden lg:table-cell text-gray-400 text-xs">
-                      {new Date(p.data_inicio).toLocaleDateString('pt-BR')} – {new Date(p.data_fim).toLocaleDateString('pt-BR')}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUS_CONFIG[p.status].color}`}>
-                        {STATUS_CONFIG[p.status].label}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 hidden sm:table-cell text-gray-500 text-xs">
-                      {new Date(p.created_at).toLocaleDateString('pt-BR')}
-                    </td>
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/admin/pedidos/${p.id}`}
-                        className="text-orange-400 hover:text-orange-300 text-xs font-medium transition-colors"
-                      >
-                        Analisar →
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+              <tbody>
+                {pedidos.map((p) => {
+                  const st = STATUS_CONFIG[p.status]
+                  return (
+                    <tr key={p.id} style={{ borderBottom: '1px solid #1e293b' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'monospace', fontSize: 12, color: '#94a3b8' }}>{p.numero_pedido}</td>
+                      <td style={{ padding: '12px 16px', color: '#e2e8f0', fontWeight: 500 }}>{p.nome_empresa}</td>
+                      <td style={{ padding: '12px 16px', color: '#64748b' }}>{(p as any).equipamentos?.nome ?? '—'}</td>
+                      <td style={{ padding: '12px 16px', color: '#64748b', fontSize: 12 }}>
+                        {new Date(p.data_inicio).toLocaleDateString('pt-BR')} – {new Date(p.data_fim).toLocaleDateString('pt-BR')}
+                      </td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 9999, background: st.bg, color: st.color }}>
+                          {st.label}
+                        </span>
+                      </td>
+                      <td style={{ padding: '12px 16px', color: '#475569', fontSize: 12 }}>
+                        {new Date(p.created_at).toLocaleDateString('pt-BR')}
+                      </td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <Link href={`/admin/pedidos/${p.id}`} style={{ color: '#f1f5f9', textDecoration: 'none', fontSize: 12, fontWeight: 700 }}>
+                          Analisar →
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })}
                 {pedidos.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-gray-500">
+                    <td colSpan={7} style={{ padding: '48px 16px', textAlign: 'center', color: '#475569' }}>
                       Nenhum pedido ainda.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Cards — mobile */}
+          <div className="admin-cards" style={{ display: 'none', flexDirection: 'column', gap: 10 }}>
+            {pedidos.map((p) => {
+              const st = STATUS_CONFIG[p.status]
+              return (
+                <Link key={p.id} href={`/admin/pedidos/${p.id}`} style={{ textDecoration: 'none', display: 'block', background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 10 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <p style={{ fontWeight: 700, color: '#f1f5f9', fontSize: 14, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.nome_empresa}</p>
+                      <p style={{ fontSize: 12, color: '#64748b' }}>{(p as any).equipamentos?.nome ?? '—'}</p>
+                    </div>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 9999, background: st.bg, color: st.color, flexShrink: 0 }}>
+                      {st.label}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', gap: 12 }}>
+                      <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>{p.numero_pedido}</span>
+                      <span style={{ fontSize: 11, color: '#475569' }}>
+                        {new Date(p.data_inicio).toLocaleDateString('pt-BR')} – {new Date(p.data_fim).toLocaleDateString('pt-BR')}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#f1f5f9' }}>Analisar →</span>
+                  </div>
+                </Link>
+              )
+            })}
+            {pedidos.length === 0 && (
+              <p style={{ textAlign: 'center', padding: '48px 0', color: '#475569' }}>Nenhum pedido ainda.</p>
+            )}
           </div>
         </section>
       </main>
@@ -128,27 +162,38 @@ export default async function AdminPage() {
 
 function KPI({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl border p-4 ${highlight ? 'bg-orange-500/10 border-orange-500/30' : 'bg-gray-900 border-gray-800'}`}>
-      <p className="text-xs text-gray-400 mb-1">{label}</p>
-      <p className={`text-3xl font-bold ${highlight ? 'text-orange-400' : 'text-white'}`}>{value}</p>
+    <div style={{
+      borderRadius: 12,
+      padding: '20px 24px',
+      border: `1px solid ${highlight ? 'rgba(222,28,34,0.3)' : '#1e293b'}`,
+      background: highlight ? 'rgba(222,28,34,0.08)' : '#0f172a',
+    }}>
+      <p style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>{label}</p>
+      <p style={{ fontSize: 36, fontWeight: 800, color: highlight ? '#de1c22' : '#f1f5f9', lineHeight: 1, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', letterSpacing: '-1px' }}>
+        {value}
+      </p>
     </div>
   )
 }
 
 function PedidoRow({ pedido: p, destaque }: { pedido: Pedido; destaque?: boolean }) {
   return (
-    <div className={`flex items-center justify-between px-4 py-3 rounded-xl border ${
-      destaque ? 'bg-orange-500/5 border-orange-500/20' : 'bg-gray-900 border-gray-800'
-    }`}>
+    <div className="pedido-row" style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '14px 20px', borderRadius: 10,
+      border: `1px solid ${destaque ? 'rgba(222,28,34,0.25)' : '#1e293b'}`,
+      background: destaque ? 'rgba(222,28,34,0.05)' : '#0f172a',
+    }}>
       <div>
-        <p className="font-medium text-white">{p.nome_empresa}</p>
-        <p className="text-xs text-gray-400">
-          {p.equipamentos?.nome ?? '—'} · {p.numero_pedido}
+        <p style={{ fontWeight: 600, color: '#f1f5f9', marginBottom: 2 }}>{p.nome_empresa}</p>
+        <p style={{ fontSize: 12, color: '#64748b' }}>
+          {(p as any).equipamentos?.nome ?? '—'} · {p.numero_pedido}
         </p>
       </div>
       <Link
         href={`/admin/pedidos/${p.id}`}
-        className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+        className="pedido-row-btn"
+        style={{ background: '#de1c22', color: '#fff', fontSize: 13, fontWeight: 700, padding: '9px 20px', borderRadius: 8, textDecoration: 'none', flexShrink: 0 }}
       >
         Analisar
       </Link>

@@ -24,3 +24,42 @@ body {
 .font-display {
   font-family: 'Cabinet Grotesk', 'DM Sans', Arial, sans-serif;
 }
+
+/* ── Responsive helpers ── */
+@media (max-width: 768px) {
+  /* Home: hero colapsa em coluna única */
+  .hero-grid { grid-template-columns: 1fr !important; }
+  .hero-stats { display: none !important; }
+
+  /* Home: header compacto */
+  .home-header-right { display: none !important; }
+
+  /* Home: padding lateral menor */
+  .home-main { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Home: grid de equipamentos — 2 colunas */
+  .eq-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Home: filtros empilham */
+  .filter-bar { height: auto !important; padding-top: 10px !important; padding-bottom: 10px !important; flex-wrap: wrap !important; gap: 8px !important; }
+
+  /* Admin: KPI em 2x2 */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Admin: esconde tabela, mostra cards */
+  .admin-table-wrap { display: none !important; }
+  .admin-cards { display: flex !important; }
+  .admin-main { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Admin: fila — empilha empresa e botão */
+  .pedido-row { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .pedido-row-btn { width: 100% !important; text-align: center !important; }
+
+  /* Pedido detail — colapsa em coluna única */
+  .pedido-grid { grid-template-columns: 1fr !important; }
+  .pedido-dl { grid-template-columns: 1fr !important; }
+  .pedido-dl-2col { grid-column: auto !important; }
+
+  /* Formulário de pedido — grids de 2 colunas viram 1 */
+  .form-grid-2 { grid-template-columns: 1fr !important; }
+}

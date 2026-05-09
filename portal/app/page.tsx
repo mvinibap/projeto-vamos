@@ -46,15 +46,15 @@ export default async function Home({
             </span>
             <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)' }}>Locação de Equipamentos</span>
           </Link>
-          <Link href="/admin" style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)', textDecoration: 'none' }}>
+          <Link href="/admin" className="home-header-right" style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)', textDecoration: 'none' }}>
             Área Administrativa →
           </Link>
         </div>
       </header>
 
       {/* Hero */}
-      <div style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '56px 32px 52px' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+      <div style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '40px 24px 40px' }}>
+        <div className="hero-grid" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <span style={{ width: 20, height: 2, background: 'var(--red)', display: 'block', flexShrink: 0 }} />
@@ -82,7 +82,7 @@ export default async function Home({
           </div>
 
           {/* Stats card */}
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+          <div className="hero-stats" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             {[
               { value: '20+', label: 'Categorias de equipamento' },
               { value: '27', label: 'Estados cobertos' },
@@ -106,7 +106,7 @@ export default async function Home({
 
       {/* Filtros */}
       <div id="catalogo" style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', position: 'sticky', top: 64, zIndex: 40 }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', height: 52, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="filter-bar" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px', height: 52, display: 'flex', alignItems: 'center', gap: 6 }}>
           <CategoriaFilter categorias={CATEGORIAS} categoriaAtiva={categoria} estado={estado} />
           <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
             <Suspense fallback={null}>
@@ -117,7 +117,7 @@ export default async function Home({
       </div>
 
       {/* Grid */}
-      <main style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 32px 64px' }}>
+      <main className="home-main" style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 32px 64px' }}>
         {equipamentos.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--muted)' }}>
             <p style={{ fontSize: 17 }}>Nenhum equipamento encontrado para esse filtro.</p>
@@ -130,7 +130,7 @@ export default async function Home({
             <p style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500, marginBottom: 20 }}>
               {equipamentos.length} equipamento{equipamentos.length !== 1 ? 's' : ''} encontrado{equipamentos.length !== 1 ? 's' : ''}
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="eq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
               {equipamentos.map((eq) => (
                 <EquipamentoCard key={eq.id} equipamento={eq} />
               ))}

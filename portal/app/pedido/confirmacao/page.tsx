@@ -8,42 +8,46 @@ export default async function ConfirmacaoPage({
   const { numero } = await searchParams
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-4">
-          <span className="text-xl font-bold text-orange-500">VAMOS</span>
+    <div style={{ minHeight: '100vh', background: 'var(--surface)', display: 'flex', flexDirection: 'column' }}>
+      <header style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 20px', height: 60, display: 'flex', alignItems: 'center' }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <span className="font-display" style={{ background: '#de1c22', color: '#fff', fontWeight: 800, fontSize: 14, padding: '5px 8px', borderRadius: 4, lineHeight: 1 }}>
+              VAMOS
+            </span>
+          </Link>
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 sm:p-12 max-w-lg w-full text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 20px' }}>
+        <div style={{ background: 'var(--bg)', borderRadius: 20, border: '1px solid var(--border)', padding: '48px 32px', maxWidth: 480, width: '100%', textAlign: 'center' }}>
+          <div style={{ width: 64, height: 64, background: '#f0fdf4', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 13l4 4L19 7" />
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Pedido enviado!</h1>
-          <p className="text-gray-500 mb-6">
+          <h1 className="font-display" style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: 10 }}>
+            Pedido enviado!
+          </h1>
+          <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 28 }}>
             Um especialista VAMOS entrará em contato em até 24 horas para confirmar os detalhes e dar continuidade ao processo.
           </p>
 
           {numero && (
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-8">
-              <p className="text-sm text-gray-400 mb-1">Número do pedido</p>
-              <p className="text-2xl font-bold text-gray-900 font-mono">{numero}</p>
-              <p className="text-xs text-gray-400 mt-1">Guarde este número para acompanhar seu pedido.</p>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 20px', marginBottom: 32 }}>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>Número do pedido</p>
+              <p style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)', fontFamily: 'monospace', letterSpacing: '0.5px' }}>{numero}</p>
+              <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>Guarde este número para acompanhar seu pedido.</p>
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-            >
-              Ver mais equipamentos
-            </Link>
-          </div>
+          <Link
+            href="/"
+            style={{ display: 'inline-block', background: '#de1c22', color: '#fff', fontWeight: 700, fontSize: 15, padding: '13px 32px', borderRadius: 10, textDecoration: 'none' }}
+          >
+            Ver mais equipamentos
+          </Link>
         </div>
       </main>
     </div>

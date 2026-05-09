@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
+const RED = '#de1c22'
+
 export default function AprovarRejeitarButtons({
   pedidoId,
   podeAprovar,
@@ -42,13 +44,13 @@ export default function AprovarRejeitarButtons({
 
   if (contratoEnviado) {
     return (
-      <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-6 text-center">
-        <div className="text-4xl mb-3">✅</div>
-        <p className="font-semibold text-green-400 mb-1">Contrato enviado!</p>
-        <p className="text-sm text-gray-400">
-          Link do contrato enviado para <strong>{email}</strong>
+      <div style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: 12, padding: 24, textAlign: 'center' }}>
+        <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
+        <p style={{ fontWeight: 700, color: '#4ade80', marginBottom: 4, fontSize: 14 }}>Contrato enviado!</p>
+        <p style={{ fontSize: 13, color: '#64748b' }}>
+          Link do contrato enviado para <strong style={{ color: '#94a3b8' }}>{email}</strong>
         </p>
-        <div className="mt-4 text-xs text-gray-500 space-y-1">
+        <div style={{ marginTop: 16, fontSize: 12, color: '#475569', display: 'flex', flexDirection: 'column', gap: 4 }}>
           <p>1. Contrato gerado automaticamente</p>
           <p>2. E-mail enviado ao cliente</p>
           <p>3. Aguardando assinatura digital</p>
@@ -60,11 +62,16 @@ export default function AprovarRejeitarButtons({
   if (!podeAprovar) return null
 
   return (
-    <div className="space-y-3">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       <button
         onClick={aprovar}
         disabled={loading !== null}
-        className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-800 text-white font-semibold py-4 rounded-xl transition-colors"
+        style={{
+          width: '100%', background: loading !== null ? '#14532d' : '#16a34a',
+          color: '#fff', fontWeight: 700, fontSize: 14, padding: '14px 0',
+          borderRadius: 10, border: 'none', cursor: loading !== null ? 'not-allowed' : 'pointer',
+          transition: 'background .15s',
+        }}
       >
         {loading === 'aprovando' ? 'Aprovando...' : '✅ Aprovar e Enviar Contrato'}
       </button>
@@ -73,31 +80,45 @@ export default function AprovarRejeitarButtons({
         <button
           onClick={() => setShowRejeitar(true)}
           disabled={loading !== null}
-          className="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-3 rounded-xl transition-colors text-sm"
+          style={{
+            width: '100%', background: '#1e293b', color: '#94a3b8',
+            fontWeight: 500, fontSize: 13, padding: '11px 0',
+            borderRadius: 10, border: '1px solid #334155', cursor: 'pointer',
+            transition: 'background .15s',
+          }}
         >
           Rejeitar pedido
         </button>
       ) : (
-        <div className="bg-gray-900 border border-red-500/20 rounded-xl p-4 space-y-3">
-          <label className="block text-sm text-gray-300 font-medium">Motivo da rejeição</label>
+        <div style={{ background: '#0f172a', border: `1px solid rgba(222,28,34,0.2)`, borderRadius: 10, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <label style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600 }}>Motivo da rejeição</label>
           <textarea
             value={motivoRejeicao}
             onChange={(e) => setMotivoRejeicao(e.target.value)}
             placeholder="Ex: Equipamento não disponível no estado de entrega."
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-400 resize-none"
             rows={3}
+            style={{
+              width: '100%', background: '#1e293b', border: '1px solid #334155',
+              borderRadius: 8, padding: '8px 12px', fontSize: 13, color: '#e2e8f0',
+              resize: 'none', outline: 'none', boxSizing: 'border-box',
+              fontFamily: 'inherit',
+            }}
           />
-          <div className="flex gap-2">
+          <div style={{ display: 'flex', gap: 8 }}>
             <button
               onClick={rejeitar}
               disabled={loading !== null || !motivoRejeicao.trim()}
-              className="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-red-900 text-white font-medium py-2 rounded-lg transition-colors text-sm"
+              style={{
+                flex: 1, background: loading !== null || !motivoRejeicao.trim() ? '#7f1d1d' : RED,
+                color: '#fff', fontWeight: 600, fontSize: 13, padding: '9px 0',
+                borderRadius: 8, border: 'none', cursor: !motivoRejeicao.trim() ? 'not-allowed' : 'pointer',
+              }}
             >
               {loading === 'rejeitando' ? 'Rejeitando...' : 'Confirmar rejeição'}
             </button>
             <button
               onClick={() => setShowRejeitar(false)}
-              className="px-4 py-2 text-sm text-gray-400 hover:text-gray-200 transition-colors"
+              style={{ padding: '9px 16px', fontSize: 13, color: '#64748b', background: 'none', border: 'none', cursor: 'pointer' }}
             >
               Cancelar
             </button>

@@ -11,6 +11,47 @@ const ESTADOS_BR = [
   'PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO',
 ]
 
+const RED = '#de1c22'
+
+function inputStyle(error?: string): React.CSSProperties {
+  return {
+    width: '100%',
+    border: `1.5px solid ${error ? RED : 'var(--border)'}`,
+    borderRadius: 10,
+    padding: '11px 14px',
+    fontSize: 15,
+    color: 'var(--text)',
+    background: error ? '#fff5f5' : '#fff',
+    outline: 'none',
+    fontFamily: 'inherit',
+    boxSizing: 'border-box',
+    transition: 'border-color .15s',
+  }
+}
+
+function Campo({ label, error, input }: { label: string; error?: string; input: React.ReactNode }) {
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 6 }}>
+        {label}
+      </label>
+      {input}
+      {error && <p style={{ fontSize: 12, color: RED, marginTop: 4 }}>{error}</p>}
+    </div>
+  )
+}
+
+function Secao({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+  return (
+    <section style={{ marginBottom: 28 }}>
+      <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 16, paddingBottom: 10, borderBottom: '1px solid var(--border)' }}>
+        {titulo}
+      </h2>
+      {children}
+    </section>
+  )
+}
+
 function PedidoForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -34,11 +75,7 @@ function PedidoForm() {
 
   useEffect(() => {
     if (!equipamentoId) return
-    supabase
-      .from('equipamentos')
-      .select('*')
-      .eq('id', equipamentoId)
-      .single()
+    supabase.from('equipamentos').select('*').eq('id', equipamentoId).single()
       .then(({ data }) => setEquipamento(data))
   }, [equipamentoId])
 
@@ -79,7 +116,6 @@ function PedidoForm() {
       setErros(errosValidacao)
       return
     }
-
     setLoading(true)
     const { data, error } = await supabase.from('pedidos').insert({
       equipamento_id: equipamentoId,
@@ -93,212 +129,124 @@ function PedidoForm() {
       telefone: form.telefone,
       email: form.email,
     }).select().single()
-
     setLoading(false)
-
-    if (error || !data) {
-      alert('Erro ao enviar pedido. Tente novamente.')
-      return
-    }
-
+    if (error || !data) { alert('Erro ao enviar pedido. Tente novamente.'); return }
     router.push(`/pedido/confirmacao?numero=${data.numero_pedido}`)
   }
 
   if (!equipamentoId) {
     return (
-      <div className="text-center py-16">
-        <p className="text-gray-500 mb-4">Nenhum equipamento selecionado.</p>
-        <Link href="/" className="text-orange-500 hover:underline">Ver equipamentos</Link>
+      <div style={{ textAlign: 'center', padding: '48px 0' }}>
+        <p style={{ color: 'var(--muted)', marginBottom: 12 }}>Nenhum equipamento selecionado.</p>
+        <Link href="/" style={{ color: RED, fontWeight: 600, textDecoration: 'none' }}>Ver equipamentos</Link>
       </div>
     )
   }
 
+  const grid2: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }
+  const grid2cls = 'form-grid-2'
+
   return (
-    <form onSubmit={enviar} className="space-y-6">
+    <form onSubmit={enviar}>
       {/* Equipamento selecionado */}
       {equipamento && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-4">
-          <div className="text-3xl">🏗️</div>
-          <div>
-            <p className="font-semibold text-gray-900">{equipamento.nome}</p>
-            <p className="text-sm text-gray-500 capitalize">{equipamento.categoria} · {equipamento.estado}</p>
+        <div style={{ background: '#fff5f5', border: `1.5px solid rgba(222,28,34,0.2)`, borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
+          <span style={{ fontSize: 28 }}>🏗️</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 2 }}>{equipamento.nome}</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', textTransform: 'capitalize' }}>{equipamento.categoria} · {equipamento.estado}</p>
             {equipamento.preco_dia && (
-              <p className="text-sm text-orange-600 font-medium">
+              <p style={{ fontSize: 13, color: RED, fontWeight: 600, marginTop: 2 }}>
                 A partir de R$ {equipamento.preco_dia.toLocaleString('pt-BR')}/dia
               </p>
             )}
           </div>
-          <Link href={`/equipamentos/${equipamento.id}`} className="ml-auto text-sm text-gray-400 hover:text-gray-600">
+          <Link href={`/equipamentos/${equipamento.id}`} style={{ fontSize: 12, color: 'var(--muted)', textDecoration: 'none', flexShrink: 0 }}>
             Trocar
           </Link>
         </div>
       )}
 
       {/* Dados da empresa */}
-      <section>
-        <h2 className="font-semibold text-gray-800 mb-4 text-lg">Dados da empresa</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="sm:col-span-2">
-            <Campo
-              label="Nome da empresa"
-              error={erros.nome_empresa}
-              input={
-                <input
-                  type="text"
-                  placeholder="Construtora ABC Ltda"
-                  value={form.nome_empresa}
-                  onChange={(e) => set('nome_empresa', e.target.value)}
-                  className={inputClass(erros.nome_empresa)}
-                />
-              }
-            />
-          </div>
-          <div>
-            <Campo
-              label="CNPJ"
-              error={erros.cnpj}
-              input={
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="00.000.000/0001-00"
-                  value={form.cnpj}
-                  onChange={(e) => set('cnpj', formatarCNPJ(e.target.value))}
-                  maxLength={18}
-                  className={inputClass(erros.cnpj)}
-                />
-              }
-            />
-          </div>
+      <Secao titulo="Dados da empresa">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Campo label="Nome da empresa" error={erros.nome_empresa} input={
+            <input type="text" placeholder="Construtora ABC Ltda" value={form.nome_empresa}
+              onChange={(e) => set('nome_empresa', e.target.value)} style={inputStyle(erros.nome_empresa)} />
+          } />
+          <Campo label="CNPJ" error={erros.cnpj} input={
+            <input type="text" inputMode="numeric" placeholder="00.000.000/0001-00" value={form.cnpj}
+              onChange={(e) => set('cnpj', formatarCNPJ(e.target.value))} maxLength={18} style={inputStyle(erros.cnpj)} />
+          } />
         </div>
-      </section>
+      </Secao>
 
       {/* Período */}
-      <section>
-        <h2 className="font-semibold text-gray-800 mb-4 text-lg">Período de locação</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Campo
-            label="Data de início"
-            error={erros.data_inicio}
-            input={
-              <input
-                type="date"
-                value={form.data_inicio}
-                min={new Date().toISOString().split('T')[0]}
-                onChange={(e) => set('data_inicio', e.target.value)}
-                className={inputClass(erros.data_inicio)}
-              />
-            }
-          />
-          <Campo
-            label="Data de término"
-            error={erros.data_fim}
-            input={
-              <input
-                type="date"
-                value={form.data_fim}
-                min={form.data_inicio || new Date().toISOString().split('T')[0]}
-                onChange={(e) => set('data_fim', e.target.value)}
-                className={inputClass(erros.data_fim)}
-              />
-            }
-          />
+      <Secao titulo="Período de locação">
+        <div className={grid2cls} style={grid2}>
+          <Campo label="Data de início" error={erros.data_inicio} input={
+            <input type="date" value={form.data_inicio} min={new Date().toISOString().split('T')[0]}
+              onChange={(e) => set('data_inicio', e.target.value)} style={inputStyle(erros.data_inicio)} />
+          } />
+          <Campo label="Data de término" error={erros.data_fim} input={
+            <input type="date" value={form.data_fim} min={form.data_inicio || new Date().toISOString().split('T')[0]}
+              onChange={(e) => set('data_fim', e.target.value)} style={inputStyle(erros.data_fim)} />
+          } />
         </div>
-        <p className="text-xs text-gray-400 mt-2">Período mínimo: 5 dias.</p>
-      </section>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>Período mínimo: 5 dias.</p>
+      </Secao>
 
       {/* Local de entrega */}
-      <section>
-        <h2 className="font-semibold text-gray-800 mb-4 text-lg">Local de entrega</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Campo
-            label="Estado"
-            error={erros.estado_entrega}
-            input={
-              <select
-                value={form.estado_entrega}
-                onChange={(e) => set('estado_entrega', e.target.value)}
-                className={inputClass(erros.estado_entrega)}
-              >
-                <option value="">Selecione o estado</option>
-                {ESTADOS_BR.map((uf) => <option key={uf} value={uf}>{uf}</option>)}
-              </select>
-            }
-          />
-          <Campo
-            label="Cidade"
-            error={erros.cidade_entrega}
-            input={
-              <input
-                type="text"
-                placeholder="São Paulo"
-                value={form.cidade_entrega}
-                onChange={(e) => set('cidade_entrega', e.target.value)}
-                className={inputClass(erros.cidade_entrega)}
-              />
-            }
-          />
+      <Secao titulo="Local de entrega">
+        <div className={grid2cls} style={grid2}>
+          <Campo label="Estado" error={erros.estado_entrega} input={
+            <select value={form.estado_entrega} onChange={(e) => set('estado_entrega', e.target.value)}
+              style={{ ...inputStyle(erros.estado_entrega), background: erros.estado_entrega ? '#fff5f5' : '#fff' }}>
+              <option value="">Selecione</option>
+              {ESTADOS_BR.map((uf) => <option key={uf} value={uf}>{uf}</option>)}
+            </select>
+          } />
+          <Campo label="Cidade" error={erros.cidade_entrega} input={
+            <input type="text" placeholder="São Paulo" value={form.cidade_entrega}
+              onChange={(e) => set('cidade_entrega', e.target.value)} style={inputStyle(erros.cidade_entrega)} />
+          } />
         </div>
-      </section>
+      </Secao>
 
       {/* Responsável */}
-      <section>
-        <h2 className="font-semibold text-gray-800 mb-4 text-lg">Responsável pelo contato</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="sm:col-span-2">
-            <Campo
-              label="Nome completo"
-              error={erros.nome_responsavel}
-              input={
-                <input
-                  type="text"
-                  placeholder="João da Silva"
-                  value={form.nome_responsavel}
-                  onChange={(e) => set('nome_responsavel', e.target.value)}
-                  className={inputClass(erros.nome_responsavel)}
-                />
-              }
-            />
+      <Secao titulo="Responsável pelo contato">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Campo label="Nome completo" error={erros.nome_responsavel} input={
+            <input type="text" placeholder="João da Silva" value={form.nome_responsavel}
+              onChange={(e) => set('nome_responsavel', e.target.value)} style={inputStyle(erros.nome_responsavel)} />
+          } />
+          <div className={grid2cls} style={grid2}>
+            <Campo label="Telefone / WhatsApp" error={erros.telefone} input={
+              <input type="tel" placeholder="(11) 99999-9999" value={form.telefone}
+                onChange={(e) => set('telefone', e.target.value)} style={inputStyle(erros.telefone)} />
+            } />
+            <Campo label="E-mail" error={erros.email} input={
+              <input type="email" placeholder="joao@empresa.com.br" value={form.email}
+                onChange={(e) => set('email', e.target.value)} style={inputStyle(erros.email)} />
+            } />
           </div>
-          <Campo
-            label="Telefone / WhatsApp"
-            error={erros.telefone}
-            input={
-              <input
-                type="tel"
-                placeholder="(11) 99999-9999"
-                value={form.telefone}
-                onChange={(e) => set('telefone', e.target.value)}
-                className={inputClass(erros.telefone)}
-              />
-            }
-          />
-          <Campo
-            label="E-mail"
-            error={erros.email}
-            input={
-              <input
-                type="email"
-                placeholder="joao@empresa.com.br"
-                value={form.email}
-                onChange={(e) => set('email', e.target.value)}
-                className={inputClass(erros.email)}
-              />
-            }
-          />
         </div>
-      </section>
+      </Secao>
 
       {/* Submit */}
-      <div className="border-t border-gray-100 pt-6">
+      <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24 }}>
         <button
           type="submit"
           disabled={loading}
-          className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold px-10 py-4 rounded-xl transition-colors text-lg"
+          style={{
+            width: '100%', background: loading ? '#b91c1c' : RED, color: '#fff',
+            fontWeight: 700, fontSize: 16, padding: '14px 0', borderRadius: 10,
+            border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+          }}
         >
           {loading ? 'Enviando...' : 'Enviar Solicitação'}
         </button>
-        <p className="text-xs text-gray-400 mt-3">
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, textAlign: 'center' }}>
           Sem pagamento agora. Um especialista VAMOS entrará em contato em até 24h.
         </p>
       </div>
@@ -306,42 +254,32 @@ function PedidoForm() {
   )
 }
 
-function Campo({ label, error, input }: { label: string; error?: string; input: React.ReactNode }) {
-  return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      {input}
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-    </div>
-  )
-}
-
-function inputClass(error?: string) {
-  return `w-full border rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 transition-colors text-base ${
-    error
-      ? 'border-red-400 focus:ring-red-300 bg-red-50'
-      : 'border-gray-300 focus:ring-orange-400'
-  }`
-}
-
 export default function PedidoPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
-          <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
+    <div style={{ minHeight: '100vh', background: 'var(--surface)' }}>
+      <header style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 20px', height: 60, display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Link href="/" style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)', textDecoration: 'none' }}>
             ← Voltar
           </Link>
-          <span className="text-xl font-bold text-orange-500">VAMOS</span>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <span className="font-display" style={{ background: RED, color: '#fff', fontWeight: 800, fontSize: 14, padding: '5px 8px', borderRadius: 4, lineHeight: 1 }}>
+              VAMOS
+            </span>
+          </Link>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Solicitar Locação</h1>
-        <p className="text-gray-500 mb-8">Preencha os dados abaixo e entraremos em contato em até 24h.</p>
+      <main style={{ maxWidth: 680, margin: '0 auto', padding: '32px 20px 64px' }}>
+        <h1 className="font-display" style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: 6 }}>
+          Solicitar Locação
+        </h1>
+        <p style={{ fontSize: 15, color: 'var(--muted)', marginBottom: 28 }}>
+          Preencha os dados abaixo e entraremos em contato em até 24h.
+        </p>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-          <Suspense fallback={<p className="text-gray-400">Carregando...</p>}>
+        <div style={{ background: 'var(--bg)', borderRadius: 16, border: '1px solid var(--border)', padding: '28px 24px' }}>
+          <Suspense fallback={<p style={{ color: 'var(--muted)' }}>Carregando...</p>}>
             <PedidoForm />
           </Suspense>
         </div>
