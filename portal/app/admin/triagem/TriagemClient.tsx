@@ -136,7 +136,7 @@ export default function TriagemClient({
       {/* Novos — triage */}
       {mostrarNovos && novosFiltrados.length > 0 && (
         <section style={{ marginBottom: 24 }}>
-          <h2 style={{ fontSize: 11, fontWeight: 700, color: '#f1f5f9', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <h2 style={{ fontSize: 13, fontWeight: 700, color: '#f1f5f9', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
             <span aria-hidden style={{ width: 6, height: 6, borderRadius: 9999, background: '#de1c22', display: 'inline-block', flexShrink: 0 }} />
             Aguardando análise ({novosFiltrados.length})
           </h2>
@@ -209,7 +209,7 @@ export default function TriagemClient({
       {/* Em análise */}
       {mostrarEmAnalise && emAnaliseFiltrados.length > 0 && (
         <section>
-          <h2 style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
+          <h2 style={{ fontSize: 13, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
             Em análise ({emAnaliseFiltrados.length})
           </h2>
           <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
