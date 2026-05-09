@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { supabase, type Pedido } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 async function getPedidos(): Promise<Pedido[]> {
   const { data } = await supabase
     .from('pedidos')

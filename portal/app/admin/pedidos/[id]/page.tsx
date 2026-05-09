@@ -4,6 +4,8 @@ import { supabase, type Pedido } from '@/lib/supabase'
 import { simularScoreCNPJ } from '@/lib/cnpj'
 import AprovarRejeitarButtons from './AprovarRejeitarButtons'
 
+export const dynamic = 'force-dynamic'
+
 async function getPedido(id: string): Promise<Pedido | null> {
   const { data } = await supabase
     .from('pedidos')
