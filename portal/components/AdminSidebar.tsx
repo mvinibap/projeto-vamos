@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 const RED = '#de1c22'
 
@@ -71,10 +72,21 @@ const NAV = [
 
 export default function AdminSidebar({ triageCount }: { triageCount?: number }) {
   const pathname = usePathname()
+  const [isExpanded, setIsExpanded] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  const sidebarWidth = isMobile && !isExpanded ? 64 : 220
 
   return (
     <aside style={{
-      width: 220,
+      width: sidebarWidth,
       minHeight: '100vh',
       background: '#0a111e',
       borderRight: '1px solid #1e293b',
@@ -84,21 +96,52 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
       top: 0,
       height: '100vh',
       flexShrink: 0,
+      transition: 'width 200ms ease-out',
     }}>
-      {/* Brand */}
-      <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid #1e293b' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{
-            background: RED, color: '#fff', fontWeight: 800, fontSize: 13,
-            padding: '4px 7px', borderRadius: 4, lineHeight: 1, letterSpacing: '-0.3px',
-            fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)',
-          }}>
-            VAMOS
-          </span>
-          <span style={{ fontSize: 11, color: '#334155', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-            Painel Admin
-          </span>
-        </div>
+      {/* Brand / Toggle */}
+      <div style={{
+        padding: '20px 16px 16px',
+        borderBottom: '1px solid #1e293b',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: isMobile ? 'space-between' : 'flex-start',
+        gap: 10,
+      }}>
+        {isExpanded && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{
+              background: RED, color: '#fff', fontWeight: 800, fontSize: 13,
+              padding: '4px 7px', borderRadius: 4, lineHeight: 1, letterSpacing: '-0.3px',
+              fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)',
+            }}>
+              VAMOS
+            </span>
+            <span style={{ fontSize: 11, color: '#334155', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              Painel Admin
+            </span>
+          </div>
+        )}
+        {isMobile && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#64748b',
+              cursor: 'pointer',
+              padding: '4px 8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 18,
+              transition: 'color 100ms',
+              marginLeft: 'auto',
+            }}
+            title={isExpanded ? 'Colapsar' : 'Expandir'}
+          >
+            {isExpanded ? '✕' : '☰'}
+          </button>
+        )}
       </div>
 
       {/* Nav */}
@@ -123,22 +166,28 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
                 fontWeight: isActive ? 600 : 400,
                 transition: 'all 100ms',
                 position: 'relative',
+                justifyContent: !isExpanded ? 'center' : 'flex-start',
               }}
+              title={!isExpanded ? item.label : undefined}
             >
               <span style={{ flexShrink: 0, opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
-              <span style={{ flex: 1 }}>{item.label}</span>
-              {item.badge && triageCount !== undefined && triageCount > 0 && (
-                <span style={{
-                  background: RED,
-                  color: '#fff',
-                  fontSize: 10,
-                  fontWeight: 800,
-                  padding: '1px 6px',
-                  borderRadius: 9999,
-                  lineHeight: 1.6,
-                }}>
-                  {triageCount}
-                </span>
+              {isExpanded && (
+                <>
+                  <span style={{ flex: 1 }}>{item.label}</span>
+                  {item.badge && triageCount !== undefined && triageCount > 0 && (
+                    <span style={{
+                      background: RED,
+                      color: '#fff',
+                      fontSize: 10,
+                      fontWeight: 800,
+                      padding: '1px 6px',
+                      borderRadius: 9999,
+                      lineHeight: 1.6,
+                    }}>
+                      {triageCount}
+                    </span>
+                  )}
+                </>
               )}
               {isActive && (
                 <span style={{
@@ -157,14 +206,16 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
       </nav>
 
       {/* Footer */}
-      <div style={{ padding: '16px', borderTop: '1px solid #1e293b' }}>
-        <Link href="/" style={{ fontSize: 12, color: '#475569', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-          <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
-            <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Portal do Cliente
-        </Link>
-      </div>
+      {isExpanded && (
+        <div style={{ padding: '16px', borderTop: '1px solid #1e293b' }}>
+          <Link href="/" style={{ fontSize: 12, color: '#475569', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
+              <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Portal do Cliente
+          </Link>
+        </div>
+      )}
     </aside>
   )
 }
