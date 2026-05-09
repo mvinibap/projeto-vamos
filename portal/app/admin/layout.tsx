@@ -44,7 +44,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           style={{ height: 52, width: 'auto', display: 'block' }}
         />
         <div style={{ width: 1, height: 32, background: '#1e293b', flexShrink: 0 }} />
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Painel Admin
         </span>
       </header>

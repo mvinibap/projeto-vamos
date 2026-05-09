@@ -142,8 +142,8 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
                 textDecoration: 'none',
                 marginBottom: 2,
                 background: isActive ? '#1e293b' : 'transparent',
-                color: isActive ? '#f1f5f9' : '#64748b',
-                fontSize: 13,
+                color: isActive ? '#f1f5f9' : '#94a3b8',
+                fontSize: 14,
                 fontWeight: isActive ? 600 : 400,
                 transition: 'all 100ms',
                 position: 'relative',
@@ -190,7 +190,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
       <div style={{ borderTop: '1px solid #1e293b' }}>
         {isExpanded && (
           <div style={{ padding: '8px 8px 12px' }}>
-            <Link href="/" style={{ fontSize: 12, color: '#475569', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
+            <Link href="/" style={{ fontSize: 12, color: '#94a3b8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
               <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
                 <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
               </svg>

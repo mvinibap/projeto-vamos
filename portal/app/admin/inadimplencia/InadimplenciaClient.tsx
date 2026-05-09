@@ -44,7 +44,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
           Inadimplência & Vencimentos
         </h1>
-        <p style={{ fontSize: 13, color: '#475569' }}>
+        <p style={{ fontSize: 14, color: '#94a3b8' }}>
           {filtro
             ? <>Filtrando por <strong style={{ color: '#cbd5e1' }}>{RISCO_CFG[filtro].label}</strong> · {counts[filtro]} contrato{counts[filtro] !== 1 ? 's' : ''}</>
             : 'Contratos ativos ordenados por data de vencimento'

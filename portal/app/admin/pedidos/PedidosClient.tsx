@@ -47,7 +47,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
           <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
             Todos os Pedidos
           </h1>
-          <p style={{ fontSize: 13, color: '#475569' }}>
+          <p style={{ fontSize: 14, color: '#94a3b8' }}>
             {filtro
               ? <>{visiveis.length} pedido{visiveis.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CONFIG[filtro].label}</strong></>
               : <>{pedidos.length} pedido{pedidos.length !== 1 ? 's' : ''} no total</>

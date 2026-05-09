@@ -82,7 +82,7 @@ export default function TriagemClient({
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
           Fila de Triagem
         </h1>
-        <p style={{ fontSize: 13, color: '#475569' }}>
+        <p style={{ fontSize: 14, color: '#94a3b8' }}>
           Pedidos aguardando análise e aprovação · Score calculado pelo simulador CNPJ
           {filtro && (
             <button
