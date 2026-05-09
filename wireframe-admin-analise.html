@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, Arial, sans-serif; background: #f0f2f5; color: #222; }
+  .layout { display: flex; height: 100vh; }
+  .sidebar { width: 220px; background: #1a1a2e; flex-shrink: 0; }
+  .sidebar-logo { padding: 20px; font-size: 20px; font-weight: 900; color: #E04E2E; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .sidebar-logo span { color: #fff; }
+  .sidebar-menu { padding: 16px 0; }
+  .menu-item { padding: 11px 20px; color: rgba(255,255,255,0.5); font-size: 13px; display: flex; align-items: center; gap: 10px; }
+  .menu-item.active { background: rgba(224,78,46,0.15); color: #fff; border-left: 3px solid #E04E2E; }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .topbar { background: #fff; border-bottom: 1px solid #e8e8e8; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  .back-btn { color: #888; font-size: 13px; cursor: pointer; }
+  .topbar h1 { font-size: 16px; font-weight: 700; }
+  .content { padding: 24px; overflow-y: auto; flex: 1; display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+
+  /* LEFT COL */
+  .card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 14px; }
+  .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { color: #888; }
+  .detail-val { font-weight: 500; }
+
+  /* CNPJ SCORE */
+  .score-box { background: #E8F5E9; border: 1px solid #C8E6C9; border-radius: 8px; padding: 16px; margin-top: 12px; }
+  .score-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .score-badge { background: #2E7D32; color: #fff; font-size: 22px; font-weight: 900; padding: 8px 14px; border-radius: 6px; }
+  .score-label { font-size: 13px; color: #2E7D32; font-weight: 600; }
+  .score-items { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+  .score-item { font-size: 12px; color: #444; display: flex; align-items: center; gap: 6px; }
+
+  /* RIGHT COL */
+  .action-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; padding: 20px; margin-bottom: 16px; }
+  .action-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .action-sub { font-size: 12px; color: #888; margin-bottom: 16px; }
+  .btn-approve { width: 100%; background: #2E7D32; color: #fff; border: none; padding: 14px; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-reject { width: 100%; background: #fff; color: #c62828; border: 1px solid #c62828; padding: 12px; border-radius: 6px; font-size: 14px; cursor: pointer; }
+  .contract-preview { background: #f8f9fa; border: 1px dashed #ccc; border-radius: 6px; padding: 14px; margin-bottom: 12px; }
+  .contract-title { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .contract-line { font-size: 12px; color: #666; margin-bottom: 4px; }
+  .contract-line strong { color: #222; }
+  .flow-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .step { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #555; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: #E04E2E; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+  .contract-chip { display: inline-flex; gap: 6px; align-items: center; background: #F3E5F5; color: #6A1B9A; border-radius: 4px; padding: 4px 10px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-logo">VAMOS<span>+PME</span></div>
+    <div class="sidebar-menu">
+      <div class="menu-item active">📋 Pedidos</div>
+      <div class="menu-item" style="opacity:.4">🚜 Equipamentos</div>
+      <div class="menu-item" style="opacity:.4">📄 Contratos</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="back-btn">← Pedidos</span>
+      <h1>Análise: Construtora Almeida Ltda</h1>
+      <span class="status" style="margin-left:auto; background:#FFF3E0; color:#BF360C; padding:4px 12px; border-radius:4px; font-size:12px; font-weight:700;">AGUARDANDO ANÁLISE</span>
+    </div>
+
+    <div class="content">
+      <!-- LEFT -->
+      <div>
+        <div class="card">
+          <div class="card-title">Dados do Pedido</div>
+          <div class="detail-row"><span class="detail-label">Equipamento</span><span class="detail-val">Case 580N — Retroescavadeira 4x4</span></div>
+          <div class="detail-row"><span class="detail-label">Período</span><span class="detail-val">01/06/2026 → 31/08/2026 (3 meses)</span></div>
+          <div class="detail-row"><span class="detail-label">Estado de entrega</span><span class="detail-val">Guarulhos, SP</span></div>
+          <div class="detail-row"><span class="detail-label">Valor total</span><span class="detail-val" style="font-size:16px;font-weight:700;color:#E04E2E">R$ 25.500,00</span></div>
+          <div class="detail-row"><span class="detail-label">Pedido recebido</span><span class="detail-val">08/05/2026 às 14h32</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Dados da Empresa</div>
+          <div class="detail-row"><span class="detail-label">Razão Social</span><span class="detail-val">Construtora Almeida Ltda</span></div>
+          <div class="detail-row"><span class="detail-label">CNPJ</span><span class="detail-val">23.456.789/0001-00</span></div>
+          <div class="detail-row"><span class="detail-label">Situação</span><span class="detail-val" style="color:#2E7D32">✓ Ativa (Receita Federal)</span></div>
+          <div class="detail-row"><span class="detail-label">Fundação</span><span class="detail-val">2016 — 8 anos de atividade</span></div>
+          <div class="detail-row"><span class="detail-label">Porte</span><span class="detail-val">Microempresa</span></div>
+          <div class="detail-row"><span class="detail-label">Responsável</span><span class="detail-val">João Almeida · (11) 99887-7654</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Análise Automática de CNPJ</div>
+          <div class="score-box">
+            <div class="score-header">
+              <div class="score-badge">8.2</div>
+              <div>
+                <div class="score-label">Score: Baixo risco</div>
+                <div style="font-size:11px;color:#555">análise automática · atualizado agora</div>
+              </div>
+            </div>
+            <div class="score-items">
+              <div class="score-item">✓ Empresa ativa há mais de 5 anos</div>
+              <div class="score-item">✓ Sem pendências na Receita Federal</div>
+              <div class="score-item">✓ CNPJ não consta em protestos</div>
+              <div class="score-item" style="color:#888">— Histórico de crédito não verificado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="action-card">
+          <div class="action-title">Ação rápida</div>
+          <div class="action-sub">Ao aprovar, o contrato é gerado automaticamente e enviado por email para o cliente.</div>
+
+          <div class="contract-preview">
+            <div class="contract-title">Prévia do contrato</div>
+            <div class="contract-line"><strong>Equipamento:</strong> Case 580N — Retro 4x4</div>
+            <div class="contract-line"><strong>Valor:</strong> R$ 25.500,00 (3 meses)</div>
+            <div class="contract-line"><strong>Período:</strong> 01/06 → 31/08/2026</div>
+            <div class="contract-line"><strong>Entrega:</strong> Guarulhos, SP</div>
+            <div class="contract-line"><strong>Assinatura:</strong> Digital (DocuSign)</div>
+          </div>
+
+          <button class="btn-approve">✓ Aprovar e Enviar Contrato</button>
+          <button class="btn-reject">Rejeitar pedido</button>
+        </div>
+
+        <div class="action-card">
+          <div class="card-title">O que acontece depois</div>
+          <div class="flow-steps">
+            <div class="step"><div class="step-num">1</div>Contrato gerado automaticamente</div>
+            <div class="step"><div class="step-num">2</div>Email enviado para joaoalmeida@email.com</div>
+            <div class="step"><div class="step-num">3</div>Cliente assina digitalmente</div>
+            <div class="step"><div class="step-num">4</div>Você recebe confirmação + o equipamento é reservado</div>
+            <div class="step"><div class="step-num">5</div>Entrega agendada para 01/06</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
