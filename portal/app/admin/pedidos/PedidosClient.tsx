@@ -36,11 +36,14 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
   const counts: Partial<Record<PedidoStatus, number>> = {}
   pedidos.forEach((p) => { counts[p.status] = (counts[p.status] || 0) + 1 })
 
-  const toggle = (s: PedidoStatus) => setFiltro((prev) => (prev === s ? null : s))
-
   const filtered = filtro ? pedidos.filter((p) => p.status === filtro) : pedidos
   const pagination = usePagination(filtered, 50)
   const visiveis = pagination.visible
+
+  const toggle = (s: PedidoStatus) => {
+    setFiltro((prev) => (prev === s ? null : s))
+    pagination.setPage(1)
+  }
 
   return (
     <main style={{ padding: '32px 32px 64px' }}>

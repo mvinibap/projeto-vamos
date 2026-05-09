@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export function usePagination<T>(items: T[], pageSize = 50) {
   const [page, setPage] = useState(1)
   const total = items.length
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
-  useEffect(() => { setPage(1) }, [total])
+  // Clamp during render. Callers should setPage(1) when their filter changes.
   const current = Math.min(page, totalPages)
   const start = (current - 1) * pageSize
   const end = Math.min(start + pageSize, total)

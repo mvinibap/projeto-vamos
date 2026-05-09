@@ -46,6 +46,10 @@ body {
   /* Admin: KPI em 2x2 */
   .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
 
+  /* Admin: reserve room for the fixed mobile menu trigger (44px button + 12px L offset + 8px) */
+  .admin-header { padding-left: 68px !important; padding-right: 16px !important; gap: 12px !important; }
+  .admin-header img { height: 36px !important; }
+
   /* Admin: esconde tabela, mostra cards */
   .admin-table-wrap { display: none !important; }
   .admin-cards { display: flex !important; }

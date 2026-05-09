@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { FilterBadge } from '@/components/FilterBadge'
 import { PaginatorControls } from '@/components/Paginator'
@@ -31,17 +31,17 @@ const RISK_ORDER: RiskLevel[] = ['vencido', 'vence_hoje', 'vence_semana', 'ok']
 
 const PAGE_SIZE = 50
 
+const INITIAL_PAGES: Record<RiskLevel, number> = { vencido: 1, vence_hoje: 1, vence_semana: 1, ok: 1 }
+
 export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[] }) {
   const [filtro, setFiltro] = useState<RiskLevel | null>(null)
-  const toggle = (r: RiskLevel) => setFiltro((prev) => (prev === r ? null : r))
-
-  const [pages, setPages] = useState<Record<RiskLevel, number>>({ vencido: 1, vence_hoje: 1, vence_semana: 1, ok: 1 })
+  const [pages, setPages] = useState<Record<RiskLevel, number>>(INITIAL_PAGES)
   const setGroupPage = (k: RiskLevel, p: number) => setPages((prev) => ({ ...prev, [k]: p }))
 
-  // reset all pages when filter changes
-  useEffect(() => {
-    setPages({ vencido: 1, vence_hoje: 1, vence_semana: 1, ok: 1 })
-  }, [filtro])
+  const toggle = (r: RiskLevel) => {
+    setFiltro((prev) => (prev === r ? null : r))
+    setPages(INITIAL_PAGES)
+  }
 
   const counts: Record<RiskLevel, number> = { vencido: 0, vence_hoje: 0, vence_semana: 0, ok: 0 }
   rows.forEach((r) => { counts[r._risco]++ })

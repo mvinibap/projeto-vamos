@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       flexDirection: 'column',
     }}>
       {/* Top header */}
-      <header style={{
+      <header className="admin-header" style={{
         height: 72,
         background: '#0a111e',
         borderBottom: '1px solid #1e293b',

@@ -23,7 +23,6 @@ const STATUS_CFG: Record<EqStatus, { label: string; pillBg: string; pillColor: s
 
 export default function EquipamentosClient({ equipamentos }: { equipamentos: EquipamentoRow[] }) {
   const [filtro, setFiltro] = useState<EqStatus | null>(null)
-  const toggle = (s: EqStatus) => setFiltro((prev) => (prev === s ? null : s))
 
   const total        = equipamentos.length
   const disponiveis  = equipamentos.filter((e) => e.status === 'disponivel').length
@@ -33,6 +32,11 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
   const filtered = filtro ? equipamentos.filter((e) => e.status === filtro) : equipamentos
   const pagination = usePagination(filtered, 50)
   const visiveis = pagination.visible
+
+  const toggle = (s: EqStatus) => {
+    setFiltro((prev) => (prev === s ? null : s))
+    pagination.setPage(1)
+  }
 
   return (
     <main style={{ padding: '32px 32px 64px' }}>

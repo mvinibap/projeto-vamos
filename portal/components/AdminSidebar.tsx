@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const RED = '#de1c22'
+const MOBILE_BREAKPOINT = '(max-width: 767px)'
 
 const NAV = [
   {
@@ -72,45 +73,59 @@ const NAV = [
 
 export default function AdminSidebar({ triageCount }: { triageCount?: number }) {
   const pathname = usePathname()
-  const [isExpanded, setIsExpanded] = useState(true)
+  // Desktop: collapsed = 80px rail, expanded = 220px. Mobile: closed = off-canvas, open = 280px drawer.
+  const [isMobile, setIsMobile] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
 
-  const W = isExpanded ? 220 : 80
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_BREAKPOINT)
+    const update = (matches: boolean) => {
+      setIsMobile(matches)
+      setIsOpen(!matches)
+    }
+    update(mq.matches)
+    const handler = (e: MediaQueryListEvent) => update(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  // ESC closes mobile drawer
+  useEffect(() => {
+    if (!isMobile || !isOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [isMobile, isOpen])
+
+  // Lock body scroll while drawer is open on mobile
+  useEffect(() => {
+    if (!isMobile) return
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [isMobile, isOpen])
+
+  const W = isMobile ? 280 : (isOpen ? 220 : 80)
+  const showLabels = isMobile ? true : isOpen
 
   return (
-    <aside style={{
-      width: W,
-      minHeight: '100vh',
-      background: '#0a111e',
-      borderRight: '1px solid #1e293b',
-      display: 'flex',
-      flexDirection: 'column',
-      position: 'sticky',
-      top: 0,
-      height: '100vh',
-      flexShrink: 0,
-      transition: 'width 220ms ease-out',
-      overflow: 'hidden',
-    }}>
-
-      {/* Toggle */}
-      <div style={{
-        padding: '12px',
-        borderBottom: '1px solid #1e293b',
-        display: 'flex',
-        justifyContent: isExpanded ? 'flex-start' : 'center',
-      }}>
+    <>
+      {/* Mobile hamburger trigger — fixed top-left, only when drawer is closed */}
+      {isMobile && !isOpen && (
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          title={isExpanded ? 'Colapsar menu' : 'Expandir menu'}
-          aria-label={isExpanded ? 'Colapsar menu' : 'Expandir menu'}
+          onClick={() => setIsOpen(true)}
+          aria-label="Abrir menu"
           style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#64748b',
-            cursor: 'pointer',
+            position: 'fixed',
+            top: 14,
+            left: 12,
+            zIndex: 60,
             width: 44,
             height: 44,
-            borderRadius: 6,
+            background: '#0a111e',
+            border: '1px solid #1e293b',
+            borderRadius: 8,
+            color: '#cbd5e1',
+            cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             gap: 4,
@@ -122,84 +137,166 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
           <span style={{ display: 'block', width: 16, height: 1.5, background: 'currentColor', borderRadius: 1 }} />
           <span style={{ display: 'block', width: 16, height: 1.5, background: 'currentColor', borderRadius: 1 }} />
         </button>
-      </div>
+      )}
 
-      {/* Nav */}
-      <nav style={{ padding: '12px 8px', flex: 1 }}>
-        {NAV.map((item) => {
-          const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '0 12px',
-                minHeight: 44,
-                borderRadius: 8,
-                textDecoration: 'none',
-                marginBottom: 2,
-                background: isActive ? '#1e293b' : 'transparent',
-                color: isActive ? '#f1f5f9' : '#94a3b8',
-                fontSize: 14,
-                fontWeight: isActive ? 600 : 400,
-                transition: 'all 100ms',
-                position: 'relative',
-                justifyContent: isExpanded ? 'flex-start' : 'center',
-              }}
-              title={!isExpanded ? item.label : undefined}
-            >
-              <span style={{ flexShrink: 0, opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
-              {isExpanded && (
-                <>
-                  <span style={{ flex: 1 }}>{item.label}</span>
-                  {item.badge && triageCount !== undefined && triageCount > 0 && (
-                    <span style={{
-                      background: '#1d4ed8',
-                      color: '#93c5fd',
-                      fontSize: 10,
-                      fontWeight: 800,
-                      padding: '1px 6px',
-                      borderRadius: 9999,
-                      lineHeight: 1.6,
-                    }}>
-                      {triageCount}
-                    </span>
-                  )}
-                </>
-              )}
-              {isActive && (
-                <span style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 6,
-                  bottom: 6,
-                  width: 3,
-                  borderRadius: 2,
-                  background: RED,
-                }} />
-              )}
-            </Link>
-          )
-        })}
-      </nav>
+      {/* Backdrop on mobile only */}
+      {isMobile && isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          aria-hidden
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(3, 7, 18, 0.6)',
+            zIndex: 70,
+            backdropFilter: 'blur(2px)',
+          }}
+        />
+      )}
 
-      {/* Footer */}
-      <div style={{ borderTop: '1px solid #1e293b' }}>
-        {isExpanded && (
-          <div style={{ padding: '8px 8px 12px' }}>
-            <Link href="/" style={{ fontSize: 12, color: '#94a3b8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
-              <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
-                <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+      <aside style={{
+        width: W,
+        minHeight: isMobile ? '100dvh' : '100vh',
+        background: '#0a111e',
+        borderRight: '1px solid #1e293b',
+        display: 'flex',
+        flexDirection: 'column',
+        position: isMobile ? 'fixed' : 'sticky',
+        top: 0,
+        left: 0,
+        height: isMobile ? '100dvh' : '100vh',
+        flexShrink: 0,
+        transition: 'width 220ms ease-out, transform 220ms ease-out',
+        overflow: 'hidden',
+        transform: isMobile && !isOpen ? 'translateX(-100%)' : 'translateX(0)',
+        zIndex: isMobile ? 80 : 'auto',
+        boxShadow: isMobile && isOpen ? '8px 0 24px rgba(0,0,0,0.4)' : 'none',
+      }}>
+
+        {/* Toggle */}
+        <div style={{
+          padding: '12px',
+          borderBottom: '1px solid #1e293b',
+          display: 'flex',
+          justifyContent: showLabels ? 'space-between' : 'center',
+          alignItems: 'center',
+        }}>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            title={isMobile ? 'Fechar menu' : (isOpen ? 'Colapsar menu' : 'Expandir menu')}
+            aria-label={isMobile ? 'Fechar menu' : (isOpen ? 'Colapsar menu' : 'Expandir menu')}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#94a3b8',
+              cursor: 'pointer',
+              width: 44,
+              height: 44,
+              borderRadius: 6,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {isMobile ? (
+              <svg width={18} height={18} viewBox="0 0 18 18" fill="none">
+                <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
               </svg>
-              Portal do Cliente
-            </Link>
-          </div>
-        )}
-      </div>
+            ) : (
+              <>
+                <span style={{ display: 'block', width: 16, height: 1.5, background: 'currentColor', borderRadius: 1 }} />
+                <span style={{ display: 'block', width: 16, height: 1.5, background: 'currentColor', borderRadius: 1 }} />
+                <span style={{ display: 'block', width: 16, height: 1.5, background: 'currentColor', borderRadius: 1 }} />
+              </>
+            )}
+          </button>
+          {isMobile && (
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '1.5px', marginRight: 8 }}>
+              Menu
+            </span>
+          )}
+        </div>
 
-    </aside>
+        {/* Nav */}
+        <nav style={{ padding: '12px 8px', flex: 1, overflowY: 'auto' }}>
+          {NAV.map((item) => {
+            const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => { if (isMobile) setIsOpen(false) }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  padding: '0 12px',
+                  minHeight: 44,
+                  borderRadius: 8,
+                  textDecoration: 'none',
+                  marginBottom: 2,
+                  background: isActive ? '#1e293b' : 'transparent',
+                  color: isActive ? '#f1f5f9' : '#94a3b8',
+                  fontSize: 14,
+                  fontWeight: isActive ? 600 : 400,
+                  transition: 'all 100ms',
+                  position: 'relative',
+                  justifyContent: showLabels ? 'flex-start' : 'center',
+                }}
+                title={!showLabels ? item.label : undefined}
+              >
+                <span style={{ flexShrink: 0, opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
+                {showLabels && (
+                  <>
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    {item.badge && triageCount !== undefined && triageCount > 0 && (
+                      <span style={{
+                        background: '#1d4ed8',
+                        color: '#93c5fd',
+                        fontSize: 10,
+                        fontWeight: 800,
+                        padding: '1px 6px',
+                        borderRadius: 9999,
+                        lineHeight: 1.6,
+                      }}>
+                        {triageCount}
+                      </span>
+                    )}
+                  </>
+                )}
+                {isActive && (
+                  <span style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 6,
+                    bottom: 6,
+                    width: 3,
+                    borderRadius: 2,
+                    background: RED,
+                  }} />
+                )}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Footer */}
+        <div style={{ borderTop: '1px solid #1e293b' }}>
+          {showLabels && (
+            <div style={{ padding: '8px 8px 12px' }}>
+              <Link href="/" onClick={() => { if (isMobile) setIsOpen(false) }} style={{ fontSize: 12, color: '#94a3b8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
+                <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
+                  <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Portal do Cliente
+              </Link>
+            </div>
+          )}
+        </div>
+
+      </aside>
+    </>
   )
 }
