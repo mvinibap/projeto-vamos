@@ -20,7 +20,7 @@ export type InadimplenciaRow = {
 }
 
 const RISCO_CFG: Record<RiskLevel, { label: string; filterLabel: string; title: string; subtitle: string; filterColor: string; filterBg: string; color: string; bg: string; border: string }> = {
-  vencido:      { label: 'Vencido',       filterLabel: 'Vencidos',       title: '🚨',   subtitle: 'Equipamentos ainda em uso após término do contrato', filterColor: '#f87171', filterBg: 'rgba(239,68,68,0.1)',  color: '#f87171', bg: 'rgba(239,68,68,0.1)',  border: 'rgba(239,68,68,0.3)'  },
+  vencido:      { label: 'Vencido',       filterLabel: 'Vencidos',       title: '🚨 Contratos vencidos',   subtitle: 'Equipamentos ainda em uso após término do contrato', filterColor: '#f87171', filterBg: 'rgba(239,68,68,0.1)',  color: '#f87171', bg: 'rgba(239,68,68,0.1)',  border: 'rgba(239,68,68,0.3)'  },
   vence_hoje:   { label: 'Vence hoje',    filterLabel: 'Vencem hoje',    title: '⚠️ Vencem hoje',          subtitle: 'Entrar em contato para renovação ou devolução',       filterColor: '#fb923c', filterBg: 'rgba(251,146,60,0.1)', color: '#fb923c', bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.3)' },
   vence_semana: { label: 'Vence em breve',filterLabel: 'Vencem em 7 dias',title: '📅 Vencem em até 7 dias',subtitle: 'Prospectar renovação proativamente',                   filterColor: '#facc15', filterBg: 'rgba(234,179,8,0.1)',  color: '#facc15', bg: 'rgba(234,179,8,0.08)', border: 'rgba(234,179,8,0.25)' },
   ok:           { label: 'Em dia',        filterLabel: 'Em dia',         title: 'Em dia',                 subtitle: 'Contratos ativos sem risco imediato',                  filterColor: '#4ade80', filterBg: 'rgba(34,197,94,0.1)',  color: '#4ade80', bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.2)'  },
