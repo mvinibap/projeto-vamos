@@ -20,10 +20,16 @@ export default function EquipamentoCard({ equipamento: eq }: { equipamento: Equi
         onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'; (e.currentTarget as HTMLDivElement).style.transform = 'none' }}
       >
         {/* Foto */}
-        <div style={{ position: 'relative', height: 168, background: 'var(--surface)', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48, color: '#d1d5db' }}>
-            🏗️
-          </div>
+        <div style={{ position: 'relative', height: 168, background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', overflow: 'hidden' }}>
+          {/* Placeholder SVG — shown until image loads or on error */}
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 302 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="302" height="168" fill="url(#ph)" />
+            <defs><linearGradient id="ph" x1="0" y1="0" x2="302" y2="168" gradientUnits="userSpaceOnUse"><stop stopColor="#f1f5f9"/><stop offset="1" stopColor="#e2e8f0"/></linearGradient></defs>
+            <path d="M110 100 h20 v-30 h12 l-20-26 -20 26 h12v30z M158 100 h34 v-20 h-34z M158 88 h8 v-12 h-8z M174 88 h8 v-12 h-8z" fill="#cbd5e1" fillRule="evenodd"/>
+            <rect x="96" y="100" width="110" height="6" rx="2" fill="#cbd5e1"/>
+            <circle cx="112" cy="112" r="6" fill="#cbd5e1"/>
+            <circle cx="190" cy="112" r="6" fill="#cbd5e1"/>
+          </svg>
           {eq.foto_url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
