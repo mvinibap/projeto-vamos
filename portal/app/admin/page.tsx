@@ -188,12 +188,12 @@ export default async function AdminDashboard() {
         <KPIChart
           title="Visão geral de pedidos"
           items={[
-            { label: 'Aguardando triagem', color: '#1d4ed8', value: statusMap['novo']             ?? 0 },
-            { label: 'Em análise',         color: '#c4b5fd', value: statusMap['em_analise']       ?? 0 },
-            { label: 'Contrato enviado',   color: '#8b5cf6', value: statusMap['contrato_enviado'] ?? 0 },
-            { label: 'Assinado',           color: '#5b21b6', value: statusMap['assinado']         ?? 0 },
-            { label: 'Ativo',              color: '#15803d', value: statusMap['ativo']            ?? 0 },
-            { label: 'Rejeitado',          color: '#334155', value: statusMap['rejeitado']        ?? 0 },
+            { label: 'Aguardando triagem', color: '#64748b', value: statusMap['novo']             ?? 0 },
+            { label: 'Em análise',         color: '#fb923c', value: statusMap['em_analise']       ?? 0 },
+            { label: 'Contrato enviado',   color: '#e85a5e', value: statusMap['contrato_enviado'] ?? 0 },
+            { label: 'Assinado',           color: '#de1c22', value: statusMap['assinado']         ?? 0 },
+            { label: 'Ativo',              color: '#4ade80', value: statusMap['ativo']            ?? 0 },
+            { label: 'Rejeitado',          color: '#1e293b', value: statusMap['rejeitado']        ?? 0 },
           ]}
           footer={`${pedidos.length} pedidos no total`}
         />

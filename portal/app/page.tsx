@@ -96,10 +96,10 @@ export default async function Home({
                 <div className="font-display" style={{ fontSize: 38, fontWeight: 800, color: 'var(--text)', letterSpacing: '-1.5px', lineHeight: 1 }}>
                   {s.value.replace(/[+kh]$/, '')}<span style={{ color: 'var(--red)' }}>{s.value.match(/[+kh]$/)?.[0] ?? ''}</span>
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4, fontWeight: 500 }}>{s.label}</div>
+                <div style={{ fontSize: 14, color: 'var(--muted)', marginTop: 4, fontWeight: 500 }}>{s.label}</div>
               </div>
             ))}
-            <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border)', paddingTop: 16, fontSize: 12, color: 'var(--muted)', display: 'flex', gap: 6 }}>
+            <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border)', paddingTop: 16, fontSize: 14, color: 'var(--muted)', display: 'flex', gap: 6 }}>
               <span style={{ color: 'var(--red)', fontWeight: 700 }}>✓</span>
               Proposta confirmada por especialista VAMOS — sem pagamento online
             </div>
@@ -145,6 +145,8 @@ export default async function Home({
       {/* Footer */}
       <footer style={{ background: '#111', color: 'rgba(255,255,255,0.4)', textAlign: 'center', padding: 24, fontSize: 13 }}>
         <span style={{ color: 'var(--red)', fontWeight: 700 }}>VAMOS</span> Locação © {new Date().getFullYear()} — Valores sujeitos a confirmação comercial.
+        <span style={{ display: 'inline-block', margin: '0 12px', opacity: 0.3 }}>·</span>
+        <Link href="/admin" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'none', fontSize: 13 }}>Área Administrativa</Link>
       </footer>
     </div>
   )
