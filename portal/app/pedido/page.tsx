@@ -150,7 +150,7 @@ function PedidoForm() {
     <form onSubmit={enviar}>
       {/* Equipamento selecionado */}
       {equipamento && (
-        <div style={{ background: '#fff5f5', border: `1.5px solid rgba(222,28,34,0.2)`, borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
+        <div style={{ background: '#f0fdf4', border: `1.5px solid #bbf7d0`, borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
           <div style={{ width: 72, height: 56, borderRadius: 8, overflow: 'hidden', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', flexShrink: 0, position: 'relative' }}>
             <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 72 56" fill="none">
               <path d="M26 38 h5 v-10 h3 l-5-8 -5 8 h3v10z M38 38 h10 v-8 h-10z" fill="#cbd5e1" fillRule="evenodd"/>
@@ -170,7 +170,7 @@ function PedidoForm() {
             <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 2 }}>{equipamento.nome}</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', textTransform: 'capitalize' }}>{equipamento.categoria} · {equipamento.estado}</p>
             {equipamento.preco_dia && (
-              <p style={{ fontSize: 13, color: RED, fontWeight: 600, marginTop: 2 }}>
+              <p style={{ fontSize: 13, color: '#16a34a', fontWeight: 600, marginTop: 2 }}>
                 A partir de R$ {equipamento.preco_dia.toLocaleString('pt-BR')}/dia
               </p>
             )}
