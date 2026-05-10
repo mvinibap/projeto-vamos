@@ -151,7 +151,21 @@ function PedidoForm() {
       {/* Equipamento selecionado */}
       {equipamento && (
         <div style={{ background: '#fff5f5', border: `1.5px solid rgba(222,28,34,0.2)`, borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-          <span style={{ fontSize: 28 }}>🏗️</span>
+          <div style={{ width: 72, height: 56, borderRadius: 8, overflow: 'hidden', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', flexShrink: 0, position: 'relative' }}>
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 72 56" fill="none">
+              <path d="M26 38 h5 v-10 h3 l-5-8 -5 8 h3v10z M38 38 h10 v-8 h-10z" fill="#cbd5e1" fillRule="evenodd"/>
+              <rect x="23" y="38" width="27" height="2" rx="1" fill="#cbd5e1"/>
+            </svg>
+            {equipamento.foto_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={equipamento.foto_url}
+                alt={equipamento.nome}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+              />
+            )}
+          </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 2 }}>{equipamento.nome}</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', textTransform: 'capitalize' }}>{equipamento.categoria} · {equipamento.estado}</p>
