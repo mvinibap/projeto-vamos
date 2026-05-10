@@ -29,6 +29,9 @@ export default function EquipamentoCard({ equipamento: eq }: { equipamento: Equi
             <img
               src={eq.foto_url}
               alt={eq.nome}
+              width={302}
+              height={168}
+              loading="lazy"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />

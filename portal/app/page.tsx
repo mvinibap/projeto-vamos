@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import EquipamentoCard from '@/components/EquipamentoCard'
 import CategoriaFilter from '@/components/CategoriaFilter'
 import EstadoFilter from '@/components/EstadoFilter'
+import HeroStats from '@/components/HeroStats'
 
 const CATEGORIAS = [
   { id: 'todos', label: 'Ver todos' },
@@ -85,25 +86,7 @@ export default async function Home({
           </div>
 
           {/* Stats card */}
-          <div className="hero-stats" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            {[
-              { value: '20+', label: 'Categorias de equipamento' },
-              { value: '27', label: 'Estados cobertos' },
-              { value: '15k', label: 'Ativos disponíveis' },
-              { value: '48h', label: 'Para receber proposta' },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="font-display" style={{ fontSize: 38, fontWeight: 800, color: 'var(--text)', letterSpacing: '-1.5px', lineHeight: 1 }}>
-                  {s.value.replace(/[+kh]$/, '')}<span style={{ color: 'var(--red)' }}>{s.value.match(/[+kh]$/)?.[0] ?? ''}</span>
-                </div>
-                <div style={{ fontSize: 14, color: 'var(--muted)', marginTop: 4, fontWeight: 500 }}>{s.label}</div>
-              </div>
-            ))}
-            <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border)', paddingTop: 16, fontSize: 14, color: 'var(--muted)', display: 'flex', gap: 6 }}>
-              <span style={{ color: 'var(--red)', fontWeight: 700 }}>✓</span>
-              Proposta confirmada por especialista VAMOS — sem pagamento online
-            </div>
-          </div>
+          <HeroStats />
         </div>
       </div>
 

@@ -32,6 +32,16 @@ body {
   font-family: 'Cabinet Grotesk', 'DM Sans', Arial, sans-serif;
 }
 
+/* ── Motion ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.35s ease-out both;
+}
+
 /* ── Responsive helpers ── */
 @media (max-width: 768px) {
   /* Home: hero colapsa em coluna única */
