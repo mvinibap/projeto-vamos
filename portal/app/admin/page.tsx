@@ -112,10 +112,10 @@ export default async function AdminDashboard() {
   const hasAlerts = novos.length > 0 || pedidosEmRisco.length > 0 || totalInadimplencia > 0
 
   return (
-    <main style={{ padding: '28px 32px 64px' }}>
+    <main style={{ padding: '32px 32px 64px' }}>
 
       {/* Título */}
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--admin-text)', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 3 }}>
           Dashboard
         </h1>
@@ -181,7 +181,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Divider */}
-      <div style={{ height: 1, background: '#131e2e', marginBottom: 28 }} />
+      <div style={{ height: 1, background: 'var(--admin-surf2)', marginBottom: 28 }} />
 
       {/* KPI Charts lado a lado */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 28 }}>
@@ -210,7 +210,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Divider */}
-      <div style={{ height: 1, background: '#131e2e', marginBottom: 28 }} />
+      <div style={{ height: 1, background: 'var(--admin-surf2)', marginBottom: 28 }} />
 
       {/* Análise operacional */}
       <AnalyticsCharts statusMap={statusMap} topEstados={topEstados} alocacao={alocacao} />

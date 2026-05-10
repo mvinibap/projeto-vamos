@@ -23,8 +23,9 @@ export default function AlugarVsComprar({ precoDia }: { precoDia: number }) {
 
   return (
     <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 14, padding: '22px 24px', marginBottom: 24 }}>
-      <h2 style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 6 }}>
-        🧮 Alugar vs Comprar
+      <h2 style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ width: 3, height: 16, background: '#16a34a', borderRadius: 2, display: 'inline-block', flexShrink: 0 }} />
+        Alugar vs Comprar
       </h2>
       <p style={{ fontSize: 13, color: '#374151', marginBottom: 16 }}>
         Compare o custo de locação com a compra deste equipamento:

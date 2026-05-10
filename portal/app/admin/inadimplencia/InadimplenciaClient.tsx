@@ -51,7 +51,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
   return (
     <main style={{ padding: '32px 32px 64px' }}>
       {/* Header */}
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--admin-text)', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
           Inadimplência & Vencimentos
         </h1>
