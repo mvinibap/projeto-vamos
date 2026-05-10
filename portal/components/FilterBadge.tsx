@@ -30,7 +30,6 @@ export function FilterBadge({
         alignItems: 'center',
         gap: 10,
         cursor: 'pointer',
-        outline: 'none',
         transition: 'border-color 0.15s, box-shadow 0.15s',
         boxShadow: active ? `0 0 0 1px ${color}40` : 'none',
       }}
