@@ -48,7 +48,7 @@ function PieChart({ slices }: { slices: Slice[] }) {
       <svg width={144} height={144} viewBox="0 0 144 144" style={{ flexShrink: 0 }}>
         {paths.map((p, i) => (
           <g key={i}>
-            <path d={p.d} fill={p.color} stroke="#0f172a" strokeWidth={1.5} />
+            <path d={p.d} fill={p.color} stroke="var(--admin-surface)" strokeWidth={1.5} />
             {p.showLabel && (
               <text x={p.lx} y={p.ly} textAnchor="middle" dominantBaseline="middle" fontSize={9} fontWeight={700} fill="#fff">
                 {Math.round(p.pct * 100)}%
@@ -61,7 +61,7 @@ function PieChart({ slices }: { slices: Slice[] }) {
         {slices.map((s) => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: s.color, flexShrink: 0, display: 'block' }} />
-            <span style={{ fontSize: 11, color: '#94a3b8', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.label}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-text-2)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.label}</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0', flexShrink: 0 }}>{Math.round(s.pct * 100)}%</span>
           </div>
         ))}
@@ -79,13 +79,13 @@ function StackedBar({ slices, subtitle }: { slices: Slice[]; subtitle?: string }
             style={{ width: `${s.pct * 100}%`, background: s.color }} />
         ))}
       </div>
-      {subtitle && <p style={{ fontSize: 11, color: '#475569', marginBottom: 10 }}>{subtitle}</p>}
+      {subtitle && <p style={{ fontSize: 11, color: 'var(--admin-muted-2)', marginBottom: 10 }}>{subtitle}</p>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {slices.map((s) => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: s.color, flexShrink: 0, display: 'block' }} />
-            <span style={{ fontSize: 11, color: '#94a3b8', flex: 1 }}>{s.label}</span>
-            <span style={{ fontSize: 11, color: '#64748b' }}>{s.count}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-text-2)', flex: 1 }}>{s.label}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-muted)' }}>{s.count}</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0', width: 34, textAlign: 'right' }}>
               {Math.round(s.pct * 100)}%
             </span>
@@ -111,7 +111,7 @@ export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alo
 
   const alocSlices = buildSlices([
     { label: 'Alugado',     color: '#15803d', count: alocacao.reservado },
-    { label: 'Ocioso',      color: '#334155', count: alocacao.disponivel },
+    { label: 'Ocioso',      color: 'var(--admin-border2)', count: alocacao.disponivel },
     { label: 'Indisponível',color: '#dc2626', count: alocacao.indisponivel },
   ], alocacao.total)
 
@@ -119,16 +119,16 @@ export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alo
     <div>
       {/* Header com toggle */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <p style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+        <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--admin-border2)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Análise operacional
         </p>
-        <div style={{ display: 'flex', background: '#1e293b', borderRadius: 6, padding: 2, gap: 2 }}>
+        <div style={{ display: 'flex', background: 'var(--admin-surf2)', borderRadius: 6, padding: 2, gap: 2 }}>
           {(['barras', 'pizza'] as const).map((v) => (
             <button key={v} onClick={() => setView(v)} style={{
               fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 4, border: 'none',
               cursor: 'pointer',
-              background: view === v ? '#334155' : 'transparent',
-              color: view === v ? '#f1f5f9' : '#475569',
+              background: view === v ? 'var(--admin-border2)' : 'transparent',
+              color: view === v ? 'var(--admin-text)' : 'var(--admin-muted-2)',
               transition: 'all 120ms',
             }}>
               {v === 'barras' ? '▬ Barras' : '◕ Pizza'}
@@ -139,8 +139,8 @@ export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alo
 
       {/* Grid dos 2 charts */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px' }}>
-          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>
+        <div style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: '20px' }}>
+          <p style={{ fontSize: 11, color: 'var(--admin-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>
             Top estados
           </p>
           {view === 'barras'
@@ -148,8 +148,8 @@ export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alo
             : <PieChart slices={estadoSlices} />}
         </div>
 
-        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px' }}>
-          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>
+        <div style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: '20px' }}>
+          <p style={{ fontSize: 11, color: 'var(--admin-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>
             Alocação de equipamentos
           </p>
           {view === 'barras'

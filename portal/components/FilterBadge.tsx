@@ -38,7 +38,7 @@ export function FilterBadge({
       <span style={{ fontSize: 20, fontWeight: 800, color, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', lineHeight: 1 }}>
         {value}
       </span>
-      <span style={{ fontSize: 12, color: active ? '#cbd5e1' : '#64748b' }}>{label}</span>
+      <span style={{ fontSize: 12, color: active ? '#cbd5e1' : 'var(--admin-muted)' }}>{label}</span>
       {active && <span style={{ fontSize: 10, color, marginLeft: 2 }}>✕</span>}
     </button>
   )

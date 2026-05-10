@@ -122,7 +122,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
             width: 44,
             height: 44,
             background: '#0a111e',
-            border: '1px solid #1e293b',
+            border: '1px solid var(--admin-surf2)',
             borderRadius: 8,
             color: '#cbd5e1',
             cursor: 'pointer',
@@ -158,7 +158,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
         width: W,
         minHeight: isMobile ? '100dvh' : '100vh',
         background: '#0a111e',
-        borderRight: '1px solid #1e293b',
+        borderRight: '1px solid var(--admin-surf2)',
         display: 'flex',
         flexDirection: 'column',
         position: isMobile ? 'fixed' : 'sticky',
@@ -176,7 +176,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
         {/* Toggle */}
         <div style={{
           padding: '12px',
-          borderBottom: '1px solid #1e293b',
+          borderBottom: '1px solid var(--admin-surf2)',
           display: 'flex',
           justifyContent: showLabels ? 'space-between' : 'center',
           alignItems: 'center',
@@ -188,7 +188,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#94a3b8',
+              color: 'var(--admin-text-2)',
               cursor: 'pointer',
               width: 44,
               height: 44,
@@ -213,7 +213,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
             )}
           </button>
           {isMobile && (
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '1.5px', marginRight: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--admin-muted)', textTransform: 'uppercase', letterSpacing: '1.5px', marginRight: 8 }}>
               Menu
             </span>
           )}
@@ -237,8 +237,8 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
                   borderRadius: 8,
                   textDecoration: 'none',
                   marginBottom: 2,
-                  background: isActive ? '#1e293b' : 'transparent',
-                  color: isActive ? '#f1f5f9' : '#94a3b8',
+                  background: isActive ? 'var(--admin-surf2)' : 'transparent',
+                  color: isActive ? 'var(--admin-text)' : 'var(--admin-text-2)',
                   fontSize: 14,
                   fontWeight: isActive ? 600 : 400,
                   transition: 'all 100ms',
@@ -283,10 +283,10 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
         </nav>
 
         {/* Footer */}
-        <div style={{ borderTop: '1px solid #1e293b' }}>
+        <div style={{ borderTop: '1px solid var(--admin-surf2)' }}>
           {showLabels && (
             <div style={{ padding: '8px 8px 12px' }}>
-              <Link href="/" onClick={() => { if (isMobile) setIsOpen(false) }} style={{ fontSize: 12, color: '#94a3b8', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
+              <Link href="/" onClick={() => { if (isMobile) setIsOpen(false) }} style={{ fontSize: 12, color: 'var(--admin-text-2)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, padding: '0 8px', minHeight: 44, borderRadius: 6 }}>
                 <svg width={12} height={12} viewBox="0 0 12 12" fill="none">
                   <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

@@ -27,7 +27,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="admin-header" style={{
         height: 72,
         background: '#0a111e',
-        borderBottom: '1px solid #1e293b',
+        borderBottom: '1px solid var(--admin-surf2)',
         display: 'flex',
         alignItems: 'center',
         padding: '0 24px',
@@ -43,8 +43,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           alt="Vamos"
           style={{ height: 52, width: 'auto', display: 'block' }}
         />
-        <div style={{ width: 1, height: 32, background: '#1e293b', flexShrink: 0 }} />
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+        <div style={{ width: 1, height: 32, background: 'var(--admin-surf2)', flexShrink: 0 }} />
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--admin-text-2)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
           Painel Admin
         </span>
       </header>

@@ -11,6 +11,17 @@
   --text-2:    #374151;
   --muted:     #6b7280;
 
+  /* Admin dark theme — Tailwind slate scale */
+  --admin-bg:      #020617;
+  --admin-surface: #0f172a;
+  --admin-surf2:   #1e293b;
+  --admin-border:  #1e293b;
+  --admin-border2: #334155;
+  --admin-text:    #f1f5f9;
+  --admin-text-2:  #94a3b8;
+  --admin-muted:   #64748b;
+  --admin-muted-2: #475569;
+
   /* Motion system */
   --dur-micro:  80ms;
   --dur-short:  200ms;
@@ -54,6 +65,21 @@ body {
 /* Stagger helpers — apply via inline animationDelay */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up { animation: none; }
+  .hero-parallax   { animation: none; }
+}
+
+/* Hero scroll parallax — progressive enhancement (Chrome 115+, FF 110+) */
+@keyframes heroFloat {
+  from { transform: translateY(0px);   opacity: 1; }
+  to   { transform: translateY(-24px); opacity: 0.85; }
+}
+
+@supports (animation-timeline: scroll()) {
+  .hero-parallax {
+    animation: heroFloat linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px 360px;
+  }
 }
 
 /* ── Responsive helpers ── */

@@ -59,7 +59,7 @@ export default async function Home({
       {/* Hero */}
       <div style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '40px 24px 40px' }}>
         <div className="hero-grid" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
-          <div>
+          <div className="hero-parallax">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <span style={{ width: 20, height: 2, background: 'var(--red)', display: 'block', flexShrink: 0 }} />
               <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '2px' }}>

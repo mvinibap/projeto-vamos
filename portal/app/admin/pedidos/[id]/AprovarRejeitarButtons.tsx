@@ -47,10 +47,10 @@ export default function AprovarRejeitarButtons({
       <div style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)', borderRadius: 12, padding: 24, textAlign: 'center' }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
         <p style={{ fontWeight: 700, color: '#4ade80', marginBottom: 4, fontSize: 14 }}>Contrato enviado!</p>
-        <p style={{ fontSize: 13, color: '#64748b' }}>
-          Link do contrato enviado para <strong style={{ color: '#94a3b8' }}>{email}</strong>
+        <p style={{ fontSize: 13, color: 'var(--admin-muted)' }}>
+          Link do contrato enviado para <strong style={{ color: 'var(--admin-text-2)' }}>{email}</strong>
         </p>
-        <div style={{ marginTop: 16, fontSize: 12, color: '#475569', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div style={{ marginTop: 16, fontSize: 12, color: 'var(--admin-muted-2)', display: 'flex', flexDirection: 'column', gap: 4 }}>
           <p>1. Contrato gerado automaticamente</p>
           <p>2. E-mail enviado ao cliente</p>
           <p>3. Aguardando assinatura digital</p>
@@ -81,24 +81,24 @@ export default function AprovarRejeitarButtons({
           onClick={() => setShowRejeitar(true)}
           disabled={loading !== null}
           style={{
-            width: '100%', background: '#1e293b', color: '#94a3b8',
+            width: '100%', background: 'var(--admin-surf2)', color: 'var(--admin-text-2)',
             fontWeight: 500, fontSize: 13, padding: '11px 0',
-            borderRadius: 10, border: '1px solid #334155', cursor: 'pointer',
+            borderRadius: 10, border: '1px solid var(--admin-border2)', cursor: 'pointer',
             transition: 'background .15s',
           }}
         >
           Rejeitar pedido
         </button>
       ) : (
-        <div style={{ background: '#0f172a', border: `1px solid rgba(222,28,34,0.2)`, borderRadius: 10, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <label style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600 }}>Motivo da rejeição</label>
+        <div style={{ background: 'var(--admin-surface)', border: `1px solid rgba(222,28,34,0.2)`, borderRadius: 10, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <label style={{ fontSize: 12, color: 'var(--admin-text-2)', fontWeight: 600 }}>Motivo da rejeição</label>
           <textarea
             value={motivoRejeicao}
             onChange={(e) => setMotivoRejeicao(e.target.value)}
             placeholder="Ex: Equipamento não disponível no estado de entrega."
             rows={3}
             style={{
-              width: '100%', background: '#1e293b', border: '1px solid #334155',
+              width: '100%', background: 'var(--admin-surf2)', border: '1px solid var(--admin-border2)',
               borderRadius: 8, padding: '8px 12px', fontSize: 13, color: '#e2e8f0',
               resize: 'none', outline: 'none', boxSizing: 'border-box',
               fontFamily: 'inherit',
@@ -118,7 +118,7 @@ export default function AprovarRejeitarButtons({
             </button>
             <button
               onClick={() => setShowRejeitar(false)}
-              style={{ padding: '9px 16px', fontSize: 13, color: '#64748b', background: 'none', border: 'none', cursor: 'pointer' }}
+              style={{ padding: '9px 16px', fontSize: 13, color: 'var(--admin-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
             >
               Cancelar
             </button>

@@ -42,15 +42,15 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
       <main style={{ maxWidth: 1024, margin: '0 auto', padding: '32px 32px 64px' }}>
         {/* Back link + title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-          <Link href="/admin/triagem" style={{ fontSize: 13, color: '#475569', textDecoration: 'none', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Link href="/admin/triagem" style={{ fontSize: 13, color: 'var(--admin-muted-2)', textDecoration: 'none', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 4 }}>
             ← Triagem
           </Link>
-          <span style={{ color: '#1e293b' }}>|</span>
-          <Link href="/admin/pedidos" style={{ fontSize: 13, color: '#475569', textDecoration: 'none', fontWeight: 500 }}>
+          <span style={{ color: 'var(--admin-surf2)' }}>|</span>
+          <Link href="/admin/pedidos" style={{ fontSize: 13, color: 'var(--admin-muted-2)', textDecoration: 'none', fontWeight: 500 }}>
             Pedidos
           </Link>
-          <span style={{ color: '#1e293b' }}>/</span>
-          <span style={{ fontSize: 13, color: '#64748b', fontFamily: 'monospace' }}>{pedido.numero_pedido}</span>
+          <span style={{ color: 'var(--admin-surf2)' }}>/</span>
+          <span style={{ fontSize: 13, color: 'var(--admin-muted)', fontFamily: 'monospace' }}>{pedido.numero_pedido}</span>
         </div>
         {/* Status atual */}
         {jaProcessado && (
@@ -69,10 +69,10 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
           {/* Coluna principal */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {/* Dados do pedido */}
-            <section style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: 24 }}>
+            <section style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: 24 }}>
               <h2 style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
                 📋 Dados do Pedido
-                <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace', marginLeft: 'auto' }}>{pedido.numero_pedido}</span>
+                <span style={{ fontSize: 11, color: 'var(--admin-muted-2)', fontFamily: 'monospace', marginLeft: 'auto' }}>{pedido.numero_pedido}</span>
               </h2>
               <dl className="pedido-dl" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <Dado label="Empresa" value={pedido.nome_empresa} />
@@ -86,7 +86,7 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
 
             {/* Equipamento e período */}
             {eq && (
-              <section style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: 24 }}>
+              <section style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: 24 }}>
                 <h2 style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', marginBottom: 20 }}>🏗️ Equipamento Solicitado</h2>
                 <dl className="pedido-dl" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <Dado label="Equipamento" value={eq.nome} span />
@@ -119,7 +119,7 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
                   <div style={{ borderRadius: 8, border: `1px solid ${recConfig.border}`, background: recConfig.bg, padding: '10px 14px', marginBottom: 20 }}>
                     <p style={{ fontSize: 12, fontWeight: 800, color: recConfig.color, letterSpacing: '0.5px' }}>{recConfig.label}</p>
                     {rec === 'aprovado' && (
-                      <p style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>
+                      <p style={{ fontSize: 11, color: 'var(--admin-muted)', marginTop: 4 }}>
                         Limite sugerido: R$ {score.limite_credito.toLocaleString('pt-BR')}
                       </p>
                     )}
@@ -131,7 +131,7 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
                 <p className="font-display" style={{ fontSize: 56, fontWeight: 800, color: scoreColor, lineHeight: 1, letterSpacing: '-2px' }}>
                   {score.score.toFixed(1)}
                 </p>
-                <p style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Score de risco (0–10)</p>
+                <p style={{ fontSize: 11, color: 'var(--admin-muted)', marginTop: 4 }}>Score de risco (0–10)</p>
               </div>
 
               <dl style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -143,8 +143,8 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
                 <ScoreItem label="Setor principal (CNAE)" value={score.setor} ok />
               </dl>
 
-              <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #1e293b' }}>
-                <p style={{ fontSize: 11, color: '#334155', lineHeight: 1.5 }}>
+              <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--admin-surf2)' }}>
+                <p style={{ fontSize: 11, color: 'var(--admin-border2)', lineHeight: 1.5 }}>
                   Análise automatizada via dados cadastrais. Atualizado em {new Date().toLocaleDateString('pt-BR')}.
                 </p>
               </div>
@@ -161,7 +161,7 @@ export default async function AnalisePedidoPage({ params }: { params: Promise<{ 
 function Dado({ label, value, span, highlight }: { label: string; value: string; span?: boolean; highlight?: boolean }) {
   return (
     <div style={span ? { gridColumn: '1 / -1' } : {}}>
-      <dt style={{ fontSize: 11, color: '#64748b', marginBottom: 4, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</dt>
+      <dt style={{ fontSize: 11, color: 'var(--admin-muted)', marginBottom: 4, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</dt>
       <dd style={{ fontWeight: 600, color: highlight ? RED : '#e2e8f0', fontSize: highlight ? 18 : 14 }}>{value}</dd>
     </div>
   )
@@ -170,7 +170,7 @@ function Dado({ label, value, span, highlight }: { label: string; value: string;
 function ScoreItem({ label, value, ok }: { label: string; value: string; ok: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <dt style={{ fontSize: 12, color: '#64748b' }}>{label}</dt>
+      <dt style={{ fontSize: 12, color: 'var(--admin-muted)' }}>{label}</dt>
       <dd style={{ fontSize: 13, fontWeight: 600, color: ok ? '#4ade80' : '#f87171', display: 'flex', alignItems: 'center', gap: 4 }}>
         {ok ? '✓' : '✗'} {value}
       </dd>

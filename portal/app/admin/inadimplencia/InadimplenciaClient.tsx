@@ -52,10 +52,10 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
     <main style={{ padding: '32px 32px 64px' }}>
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--admin-text)', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
           Inadimplência & Vencimentos
         </h1>
-        <p style={{ fontSize: 14, color: '#94a3b8' }}>
+        <p style={{ fontSize: 14, color: 'var(--admin-text-2)' }}>
           {filtro
             ? <>Filtrando por <strong style={{ color: '#cbd5e1' }}>{RISCO_CFG[filtro].label}</strong> · {counts[filtro]} contrato{counts[filtro] !== 1 ? 's' : ''}</>
             : 'Contratos ativos ordenados por data de vencimento'
@@ -100,14 +100,14 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
           <section key={key} style={{ marginBottom: 24 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 12 }}>
               <h2 style={{ fontSize: 13, fontWeight: 700, color: cfg.color }}>{cfg.title}</h2>
-              <span style={{ fontSize: 11, color: '#475569' }}>{cfg.subtitle}</span>
+              <span style={{ fontSize: 11, color: 'var(--admin-muted-2)' }}>{cfg.subtitle}</span>
             </div>
-            <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflowX: 'auto' }}>
+            <div style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', overflowX: 'auto' }}>
               <table style={{ width: '100%', minWidth: 880, fontSize: 13, borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #1e293b' }}>
+                  <tr style={{ borderBottom: '1px solid var(--admin-surf2)' }}>
                     {['Empresa', 'Equipamento', 'Score CNPJ', 'Valor', 'Término', 'Situação', ''].map((h) => (
-                      <th key={h} style={{ textAlign: 'left', padding: '8px 16px', fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>{h}</th>
+                      <th key={h} style={{ textAlign: 'left', padding: '8px 16px', fontSize: 10, fontWeight: 700, color: 'var(--admin-border2)', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -116,21 +116,21 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                     const scoreColor = p._scoreRec === 'aprovado' ? '#4ade80' : p._scoreRec === 'analise' ? '#facc15' : '#f87171'
                     const diffLabel = p._diffDias < 0 ? `${Math.abs(p._diffDias)} dias atraso` : p._diffDias === 0 ? 'Hoje' : `${p._diffDias} dias`
                     return (
-                      <tr key={p.id} style={{ borderBottom: i < visibleItems.length - 1 ? '1px solid #1e293b' : 'none', borderLeft: `3px solid ${cfg.color}40` }}>
+                      <tr key={p.id} style={{ borderBottom: i < visibleItems.length - 1 ? '1px solid var(--admin-surf2)' : 'none', borderLeft: `3px solid ${cfg.color}40` }}>
                         <td style={{ padding: '11px 16px', color: '#e2e8f0', fontWeight: 500 }}>
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block', maxWidth: 180 }}>{p.nome_empresa}</span>
-                          <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>{p.numero_pedido}</span>
+                          <span style={{ fontSize: 11, color: 'var(--admin-muted-2)', fontFamily: 'monospace' }}>{p.numero_pedido}</span>
                         </td>
-                        <td style={{ padding: '11px 16px', color: '#64748b', fontSize: 12, maxWidth: 160 }}>
+                        <td style={{ padding: '11px 16px', color: 'var(--admin-muted)', fontSize: 12, maxWidth: 160 }}>
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{p.equipamento_nome ?? '—'}</span>
                         </td>
                         <td style={{ padding: '11px 16px' }}>
                           <span style={{ fontSize: 15, fontWeight: 800, color: scoreColor, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>{p._scoreNum.toFixed(1)}</span>
                         </td>
-                        <td style={{ padding: '11px 16px', color: p._valor ? '#f1f5f9' : '#475569', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
+                        <td style={{ padding: '11px 16px', color: p._valor ? 'var(--admin-text)' : 'var(--admin-muted-2)', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
                           {p._valor ? `R$ ${p._valor.toLocaleString('pt-BR')}` : '—'}
                         </td>
-                        <td style={{ padding: '11px 16px', color: '#94a3b8', fontSize: 12, whiteSpace: 'nowrap' }}>
+                        <td style={{ padding: '11px 16px', color: 'var(--admin-text-2)', fontSize: 12, whiteSpace: 'nowrap' }}>
                           {new Date(p.data_fim).toLocaleDateString('pt-BR')}
                         </td>
                         <td style={{ padding: '11px 16px' }}>
@@ -139,7 +139,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                           </span>
                         </td>
                         <td style={{ padding: '11px 16px' }}>
-                          <Link href={`/admin/pedidos/${p.id}`} style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textDecoration: 'none', padding: '0 12px', minHeight: 36, borderRadius: 6, background: '#1e293b', border: '1px solid #334155', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                          <Link href={`/admin/pedidos/${p.id}`} style={{ fontSize: 12, fontWeight: 700, color: 'var(--admin-text-2)', textDecoration: 'none', padding: '0 12px', minHeight: 36, borderRadius: 6, background: 'var(--admin-surf2)', border: '1px solid var(--admin-border2)', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
                             Ver →
                           </Link>
                         </td>
@@ -164,9 +164,9 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
       })}
 
       {rows.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '80px 0', color: '#475569' }}>
+        <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--admin-muted-2)' }}>
           <p style={{ fontSize: 32, marginBottom: 12 }}>✓</p>
-          <p style={{ fontSize: 16, fontWeight: 600, color: '#64748b', marginBottom: 4 }}>Nenhum contrato ativo</p>
+          <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--admin-muted)', marginBottom: 4 }}>Nenhum contrato ativo</p>
           <p style={{ fontSize: 13 }}>Contratos ativos aparecerão aqui quando houver locações em andamento.</p>
         </div>
       )}

@@ -42,7 +42,7 @@ function PieChart({ slices }: { slices: Slice[] }) {
       <svg width={144} height={144} viewBox="0 0 144 144" style={{ flexShrink: 0 }}>
         {paths.map((p, i) => (
           <g key={i}>
-            <path d={p.d} fill={p.color} stroke="#0f172a" strokeWidth={1.5} />
+            <path d={p.d} fill={p.color} stroke="var(--admin-surface)" strokeWidth={1.5} />
             {p.pct > 0.07 && (
               <text x={p.lx} y={p.ly} textAnchor="middle" dominantBaseline="middle" fontSize={9} fontWeight={700} fill="#fff">
                 {Math.round(p.pct * 100)}%
@@ -55,8 +55,8 @@ function PieChart({ slices }: { slices: Slice[] }) {
         {slices.map((s) => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: s.color, flexShrink: 0, display: 'block' }} />
-            <span style={{ fontSize: 11, color: '#94a3b8', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.label}</span>
-            <span style={{ fontSize: 11, color: '#64748b' }}>{s.value}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-text-2)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.label}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-muted)' }}>{s.value}</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0', width: 34, textAlign: 'right' }}>
               {Math.round(s.pct * 100)}%
             </span>
@@ -80,15 +80,15 @@ function BarChart({ slices, footer }: { slices: Slice[]; footer?: string }) {
         {slices.map((s) => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: s.color, flexShrink: 0, display: 'block' }} />
-            <span style={{ fontSize: 11, color: '#94a3b8', flex: 1 }}>{s.label}</span>
-            <span style={{ fontSize: 11, color: '#64748b' }}>{s.value}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-text-2)', flex: 1 }}>{s.label}</span>
+            <span style={{ fontSize: 11, color: 'var(--admin-muted)' }}>{s.value}</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0', width: 34, textAlign: 'right' }}>
               {Math.round(s.pct * 100)}%
             </span>
           </div>
         ))}
       </div>
-      {footer && <p style={{ fontSize: 10, color: '#334155', marginTop: 12 }}>{footer}</p>}
+      {footer && <p style={{ fontSize: 10, color: 'var(--admin-border2)', marginTop: 12 }}>{footer}</p>}
     </div>
   )
 }
@@ -104,18 +104,18 @@ export default function KPIChart({ title, items, footer }: Props) {
   const slices = buildSlices(items)
 
   return (
-    <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, padding: '20px' }}>
+    <div style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-surf2)', borderRadius: 12, padding: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
+        <p style={{ fontSize: 11, color: 'var(--admin-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
           {title}
         </p>
-        <div style={{ display: 'flex', background: '#1e293b', borderRadius: 6, padding: 2, gap: 2 }}>
+        <div style={{ display: 'flex', background: 'var(--admin-surf2)', borderRadius: 6, padding: 2, gap: 2 }}>
           {(['barras', 'pizza'] as const).map((v) => (
             <button key={v} onClick={() => setView(v)} style={{
               fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 4, border: 'none',
               cursor: 'pointer', fontFamily: 'inherit',
-              background: view === v ? '#334155' : 'transparent',
-              color: view === v ? '#f1f5f9' : '#475569',
+              background: view === v ? 'var(--admin-border2)' : 'transparent',
+              color: view === v ? 'var(--admin-text)' : 'var(--admin-muted-2)',
               transition: 'all 120ms',
             }}>
               {v === 'barras' ? '▬ Barras' : '◕ Pizza'}
@@ -125,7 +125,7 @@ export default function KPIChart({ title, items, footer }: Props) {
       </div>
 
       {slices.length === 0
-        ? <p style={{ fontSize: 12, color: '#334155', textAlign: 'center', padding: '24px 0' }}>Sem dados</p>
+        ? <p style={{ fontSize: 12, color: 'var(--admin-border2)', textAlign: 'center', padding: '24px 0' }}>Sem dados</p>
         : view === 'barras'
           ? <BarChart slices={slices} footer={footer} />
           : <PieChart slices={slices} />}

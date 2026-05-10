@@ -42,10 +42,10 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
     <main style={{ padding: '32px 32px 64px' }}>
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--admin-text)', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
           Frota de Equipamentos
         </h1>
-        <p style={{ fontSize: 14, color: '#94a3b8' }}>
+        <p style={{ fontSize: 14, color: 'var(--admin-text-2)' }}>
           {filtro
             ? <>{filtered.length} equipamento{filtered.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CFG[filtro].label}</strong></>
             : `${total} equipamento${total !== 1 ? 's' : ''} na frota`
@@ -68,12 +68,12 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
       </div>
 
       {/* Tabela */}
-      <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflowX: 'auto' }}>
+      <div style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', overflowX: 'auto' }}>
         <table style={{ width: '100%', minWidth: 720, fontSize: 13, borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #1e293b' }}>
+            <tr style={{ borderBottom: '1px solid var(--admin-surf2)' }}>
               {['Equipamento', 'Categoria', 'Diária', 'Status', 'Disponível a partir de'].map((h) => (
-                <th key={h} style={{ textAlign: 'left', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>
+                <th key={h} style={{ textAlign: 'left', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: 'var(--admin-muted-2)', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>
                   {h}
                 </th>
               ))}
@@ -83,10 +83,10 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
             {visiveis.map((e) => {
               const cfg = STATUS_CFG[e.status]
               return (
-                <tr key={e.id} style={{ borderBottom: '1px solid #1e293b' }}>
+                <tr key={e.id} style={{ borderBottom: '1px solid var(--admin-surf2)' }}>
                   <td style={{ padding: '12px 16px', color: '#e2e8f0', fontWeight: 500 }}>{e.nome}</td>
-                  <td style={{ padding: '12px 16px', color: '#64748b', fontSize: 12 }}>{e.categoria ?? '—'}</td>
-                  <td style={{ padding: '12px 16px', color: '#94a3b8', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-muted)', fontSize: 12 }}>{e.categoria ?? '—'}</td>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-text-2)', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
                     {e.preco_dia ? `R$ ${e.preco_dia.toLocaleString('pt-BR')}/dia` : '—'}
                   </td>
                   <td style={{ padding: '12px 16px' }}>
@@ -94,7 +94,7 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
                       {cfg.label}
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#475569', fontSize: 12 }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-muted-2)', fontSize: 12 }}>
                     {e.disponivel_a_partir_de
                       ? new Date(e.disponivel_a_partir_de).toLocaleDateString('pt-BR')
                       : e.status === 'disponivel' ? <span style={{ color: '#4ade80' }}>Agora</span> : '—'}
@@ -104,7 +104,7 @@ export default function EquipamentosClient({ equipamentos }: { equipamentos: Equ
             })}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={5} style={{ padding: '60px 16px', textAlign: 'center', color: '#475569' }}>
+                <td colSpan={5} style={{ padding: '60px 16px', textAlign: 'center', color: 'var(--admin-muted-2)' }}>
                   {filtro ? (
                     <>Nenhum equipamento com status <strong>{STATUS_CFG[filtro].label}</strong>.{' '}
                       <button onClick={() => setFiltro(null)} style={{ color: '#60a5fa', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, textDecoration: 'underline' }}>Ver todos</button>

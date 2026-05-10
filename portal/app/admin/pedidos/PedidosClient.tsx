@@ -50,10 +50,10 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--admin-text)', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 4 }}>
             Todos os Pedidos
           </h1>
-          <p style={{ fontSize: 14, color: '#94a3b8' }}>
+          <p style={{ fontSize: 14, color: 'var(--admin-text-2)' }}>
             {filtro
               ? <>{filtered.length} pedido{filtered.length !== 1 ? 's' : ''} · filtrando por <strong style={{ color: '#cbd5e1' }}>{STATUS_CONFIG[filtro].label}</strong></>
               : <>{pedidos.length} pedido{pedidos.length !== 1 ? 's' : ''} no total</>
@@ -89,12 +89,12 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
       </div>
 
       {/* Tabela */}
-      <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflowX: 'auto' }}>
+      <div style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', overflowX: 'auto' }}>
         <table style={{ width: '100%', minWidth: 880, fontSize: 13, borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #1e293b' }}>
+            <tr style={{ borderBottom: '1px solid var(--admin-surf2)' }}>
               {['Pedido', 'Empresa', 'Equipamento', 'Estado', 'Período', 'Status', 'Data', ''].map((h) => (
-                <th key={h} style={{ textAlign: 'left', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>
+                <th key={h} style={{ textAlign: 'left', padding: '10px 16px', fontSize: 11, fontWeight: 700, color: 'var(--admin-muted-2)', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>
                   {h}
                 </th>
               ))}
@@ -104,8 +104,8 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
             {visiveis.map((p) => {
               const st = STATUS_CONFIG[p.status]
               return (
-                <tr key={p.id} style={{ borderBottom: '1px solid #1e293b' }}>
-                  <td style={{ padding: '12px 16px', fontFamily: 'monospace', fontSize: 12, color: '#94a3b8', whiteSpace: 'nowrap' }}>
+                <tr key={p.id} style={{ borderBottom: '1px solid var(--admin-surf2)' }}>
+                  <td style={{ padding: '12px 16px', fontFamily: 'monospace', fontSize: 12, color: 'var(--admin-text-2)', whiteSpace: 'nowrap' }}>
                     {p.numero_pedido}
                   </td>
                   <td style={{ padding: '12px 16px', color: '#e2e8f0', fontWeight: 500, maxWidth: 180 }}>
@@ -113,15 +113,15 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
                       {p.nome_empresa}
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#64748b', maxWidth: 160 }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-muted)', maxWidth: 160 }}>
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
                       {p.equipamento_nome ?? '—'}
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#94a3b8', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-text-2)', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
                     {p.estado_entrega}
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#64748b', fontSize: 12, whiteSpace: 'nowrap' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-muted)', fontSize: 12, whiteSpace: 'nowrap' }}>
                     {new Date(p.data_inicio).toLocaleDateString('pt-BR')} – {new Date(p.data_fim).toLocaleDateString('pt-BR')}
                   </td>
                   <td style={{ padding: '12px 16px', whiteSpace: 'nowrap' }}>
@@ -129,11 +129,11 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
                       {st.label}
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#475569', fontSize: 12, whiteSpace: 'nowrap' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--admin-muted-2)', fontSize: 12, whiteSpace: 'nowrap' }}>
                     {new Date(p.created_at).toLocaleDateString('pt-BR')}
                   </td>
                   <td style={{ padding: '12px 16px' }}>
-                    <Link href={`/admin/pedidos/${p.id}`} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', padding: '0 12px', minHeight: 36, borderRadius: 6, background: '#1e293b', border: '1px solid #334155', display: 'inline-flex', alignItems: 'center' }}>
+                    <Link href={`/admin/pedidos/${p.id}`} style={{ color: 'var(--admin-text-2)', textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', padding: '0 12px', minHeight: 36, borderRadius: 6, background: 'var(--admin-surf2)', border: '1px solid var(--admin-border2)', display: 'inline-flex', alignItems: 'center' }}>
                       Ver →
                     </Link>
                   </td>
@@ -142,7 +142,7 @@ export default function PedidosClient({ pedidos }: { pedidos: PedidoRow[] }) {
             })}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={8} style={{ padding: '60px 16px', textAlign: 'center', color: '#475569' }}>
+                <td colSpan={8} style={{ padding: '60px 16px', textAlign: 'center', color: 'var(--admin-muted-2)' }}>
                   {filtro ? (
                     <>
                       Nenhum pedido com status <strong>{STATUS_CONFIG[filtro].label}</strong>.{' '}

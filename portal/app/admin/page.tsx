@@ -116,16 +116,16 @@ export default async function AdminDashboard() {
 
       {/* Título */}
       <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 3 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--admin-text)', letterSpacing: '-0.5px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', marginBottom: 3 }}>
           Dashboard
         </h1>
-        <p style={{ fontSize: 13, color: '#64748b' }}>Visão geral da operação</p>
+        <p style={{ fontSize: 13, color: 'var(--admin-muted)' }}>Visão geral da operação</p>
       </div>
 
       {/* ZONA 1 — Alert strip */}
       {hasAlerts && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', flexShrink: 0 }}>
+          <span style={{ fontSize: 11, color: 'var(--admin-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', flexShrink: 0 }}>
             Atenção
           </span>
           {novos.length > 0 && (
@@ -156,25 +156,25 @@ export default async function AdminDashboard() {
       )}
 
       {/* Performance */}
-      <p style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
+      <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--admin-border2)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 12 }}>
         Performance
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
-        <div className="animate-fade-up" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px', animationDelay: '0ms' }}>
-          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
+        <div className="animate-fade-up" style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: '18px 20px', animationDelay: '0ms' }}>
+          <p style={{ fontSize: 11, color: 'var(--admin-muted)', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
           <p style={{ fontSize: 30, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {taxaAprovacao}%
           </p>
         </div>
-        <div className="animate-fade-up" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px', animationDelay: '80ms' }}>
-          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
-          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
+        <div className="animate-fade-up" style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: '18px 20px', animationDelay: '80ms' }}>
+          <p style={{ fontSize: 11, color: 'var(--admin-muted)', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
+          <p style={{ fontSize: 30, fontWeight: 800, color: 'var(--admin-text)', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {ticketMedio ? `R$ ${ticketMedio.toLocaleString('pt-BR')}` : '—'}
           </p>
         </div>
-        <div className="animate-fade-up" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px', animationDelay: '160ms' }}>
-          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
-          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
+        <div className="animate-fade-up" style={{ background: 'var(--admin-surface)', borderRadius: 12, border: '1px solid var(--admin-surf2)', padding: '18px 20px', animationDelay: '160ms' }}>
+          <p style={{ fontSize: 11, color: 'var(--admin-muted)', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
+          <p style={{ fontSize: 30, fontWeight: 800, color: 'var(--admin-text)', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {valorAtivo > 0 ? `R$ ${valorAtivo.toLocaleString('pt-BR')}` : '—'}
           </p>
         </div>
@@ -188,12 +188,12 @@ export default async function AdminDashboard() {
         <KPIChart
           title="Visão geral de pedidos"
           items={[
-            { label: 'Aguardando triagem', color: '#64748b', value: statusMap['novo']             ?? 0 },
+            { label: 'Aguardando triagem', color: 'var(--admin-muted)', value: statusMap['novo']             ?? 0 },
             { label: 'Em análise',         color: '#fb923c', value: statusMap['em_analise']       ?? 0 },
             { label: 'Contrato enviado',   color: '#e85a5e', value: statusMap['contrato_enviado'] ?? 0 },
             { label: 'Assinado',           color: '#de1c22', value: statusMap['assinado']         ?? 0 },
             { label: 'Ativo',              color: '#4ade80', value: statusMap['ativo']            ?? 0 },
-            { label: 'Rejeitado',          color: '#1e293b', value: statusMap['rejeitado']        ?? 0 },
+            { label: 'Rejeitado',          color: 'var(--admin-surf2)', value: statusMap['rejeitado']        ?? 0 },
           ]}
           footer={`${pedidos.length} pedidos no total`}
         />

@@ -46,9 +46,9 @@ export function PaginatorControls({
   if (total <= pageSize) return null
 
   const btn = (disabled: boolean): React.CSSProperties => ({
-    background: disabled ? 'transparent' : '#1e293b',
-    color: disabled ? '#475569' : '#cbd5e1',
-    border: `1px solid ${disabled ? '#1e293b' : '#334155'}`,
+    background: disabled ? 'transparent' : 'var(--admin-surf2)',
+    color: disabled ? 'var(--admin-muted-2)' : '#cbd5e1',
+    border: `1px solid ${disabled ? 'var(--admin-surf2)' : 'var(--admin-border2)'}`,
     borderRadius: 6,
     padding: '0 12px',
     minHeight: 36,
@@ -68,10 +68,10 @@ export function PaginatorControls({
       justifyContent: 'space-between',
       gap: 12,
       padding: '12px 16px',
-      borderTop: '1px solid #1e293b',
+      borderTop: '1px solid var(--admin-surf2)',
       background: '#0a111e',
     }}>
-      <span style={{ fontSize: 13, color: '#94a3b8' }}>
+      <span style={{ fontSize: 13, color: 'var(--admin-text-2)' }}>
         Mostrando <strong style={{ color: '#e2e8f0' }}>{start + 1}–{end}</strong> de{' '}
         <strong style={{ color: '#e2e8f0' }}>{total}</strong> {label}{total !== 1 ? pluralSuffix : ''}
       </span>
@@ -84,7 +84,7 @@ export function PaginatorControls({
         >
           ‹ Anterior
         </button>
-        <span style={{ fontSize: 12, color: '#64748b', minWidth: 96, textAlign: 'center' }}>
+        <span style={{ fontSize: 12, color: 'var(--admin-muted)', minWidth: 96, textAlign: 'center' }}>
           Página {page} de {totalPages}
         </span>
         <button
