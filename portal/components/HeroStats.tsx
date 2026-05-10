@@ -3,30 +3,30 @@
 import { useEffect, useRef, useState } from 'react'
 
 const STATS = [
-  { target: 20, suffix: '+', label: 'Categorias de equipamento' },
-  { target: 27, suffix: '',  label: 'Estados cobertos' },
-  { target: 15, suffix: 'k', label: 'Ativos disponíveis' },
-  { target: 48, suffix: 'h', label: 'Para receber proposta' },
+  { from: 0,  target: 20, suffix: '+', label: 'Categorias de equipamento' },
+  { from: 0,  target: 27, suffix: '',  label: 'Estados cobertos' },
+  { from: 0,  target: 15, suffix: 'k', label: 'Ativos disponíveis' },
+  { from: 96, target: 48, suffix: 'h', label: 'Para receber proposta' },
 ]
 
-function useCountUp(target: number, duration: number, active: boolean) {
-  const [value, setValue] = useState(0)
+function useCountTo(from: number, target: number, duration: number, active: boolean) {
+  const [value, setValue] = useState(from)
   useEffect(() => {
     if (!active) return
     const start = performance.now()
     const tick = (now: number) => {
       const p = Math.min((now - start) / duration, 1)
       const eased = 1 - Math.pow(1 - p, 3)
-      setValue(Math.round(eased * target))
+      setValue(Math.round(from + (target - from) * eased))
       if (p < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
-  }, [active, target, duration])
+  }, [active, from, target, duration])
   return value
 }
 
-function StatItem({ target, suffix, label, active }: typeof STATS[0] & { active: boolean }) {
-  const count = useCountUp(target, 700, active)
+function StatItem({ from, target, suffix, label, active }: typeof STATS[0] & { active: boolean }) {
+  const count = useCountTo(from, target, 700, active)
   return (
     <div>
       <div className="font-display" style={{ fontSize: 38, fontWeight: 800, color: 'var(--text)', letterSpacing: '-1.5px', lineHeight: 1 }}>
