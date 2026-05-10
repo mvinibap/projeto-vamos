@@ -10,6 +10,15 @@
   --text:      #111111;
   --text-2:    #374151;
   --muted:     #6b7280;
+
+  /* Motion system */
+  --dur-micro:  80ms;
+  --dur-short:  200ms;
+  --dur-medium: 350ms;
+  --dur-long:   600ms;
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-move:  cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * { box-sizing: border-box; }
@@ -39,7 +48,12 @@ body {
 }
 
 .animate-fade-up {
-  animation: fadeUp 0.35s ease-out both;
+  animation: fadeUp var(--dur-medium) var(--ease-out) both;
+}
+
+/* Stagger helpers — apply via inline animationDelay */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up { animation: none; }
 }
 
 /* ── Responsive helpers ── */

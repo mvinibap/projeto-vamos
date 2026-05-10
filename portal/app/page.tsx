@@ -117,8 +117,10 @@ export default async function Home({
               {equipamentos.length} equipamento{equipamentos.length !== 1 ? 's' : ''} encontrado{equipamentos.length !== 1 ? 's' : ''}
             </p>
             <div className="eq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-              {equipamentos.map((eq) => (
-                <EquipamentoCard key={eq.id} equipamento={eq} />
+              {equipamentos.map((eq, i) => (
+                <div key={eq.id} className="animate-fade-up" style={{ animationDelay: `${Math.min(i, 11) * 40}ms` }}>
+                  <EquipamentoCard equipamento={eq} />
+                </div>
               ))}
             </div>
           </>

@@ -160,19 +160,19 @@ export default async function AdminDashboard() {
         Performance
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
-        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
+        <div className="animate-fade-up" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px', animationDelay: '0ms' }}>
           <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
           <p style={{ fontSize: 30, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {taxaAprovacao}%
           </p>
         </div>
-        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
+        <div className="animate-fade-up" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px', animationDelay: '80ms' }}>
           <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
           <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {ticketMedio ? `R$ ${ticketMedio.toLocaleString('pt-BR')}` : '—'}
           </p>
         </div>
-        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
+        <div className="animate-fade-up" style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px', animationDelay: '160ms' }}>
           <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
           <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {valorAtivo > 0 ? `R$ ${valorAtivo.toLocaleString('pt-BR')}` : '—'}
