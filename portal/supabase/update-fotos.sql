@@ -29,9 +29,14 @@ UPDATE equipamentos
 SET foto_url = 'https://apisite.vamos.com.br/uploads/PC_160_86cd8d96a4.svg'
 WHERE nome LIKE 'JLG 600S Plataforma%';
 
--- Plataformas (Skyjack)
+-- Plataformas (Genie Z-60/37 FE) — fonte: genielift.com oficial
 UPDATE equipamentos
-SET foto_url = 'https://images.vamos.com.br/skyjack-sj9250.jpg'
+SET foto_url = 'https://www.genielift.com/images/default-source/product-images/articulated-boom-lift/z-60-fe/z-6037_alt1.jpeg?sfvrsn=1274f206_37'
+WHERE nome LIKE 'Genie Z-60%';
+
+-- Plataformas (Skyjack SJ9250) — fonte: skyjack.com oficial
+UPDATE equipamentos
+SET foto_url = 'https://www.skyjack.com/sites/default/files/2019-03/na_SJ9250.jpg'
 WHERE nome LIKE 'Skyjack SJ9250%';
 
 -- Guindastes e compactadores (equipamentos pesados da linha amarela VAMOS)
