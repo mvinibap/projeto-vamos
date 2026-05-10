@@ -106,7 +106,7 @@ export default function KPIChart({ title, items, footer }: Props) {
   return (
     <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: 12, padding: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+        <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
           {title}
         </p>
         <div style={{ display: 'flex', background: '#1e293b', borderRadius: 6, padding: 2, gap: 2 }}>

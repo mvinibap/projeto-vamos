@@ -142,7 +142,7 @@ export default function TriagemClient({
           <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr 60px 56px 110px 72px auto', padding: '8px 16px', borderBottom: '1px solid #1e293b', borderLeft: '3px solid transparent' }}>
               {['Score', 'Empresa', 'Equipamento', 'Estado', 'Dias', 'Valor est.', 'Aguarda', ''].map((h) => (
-                <span key={h} style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{h}</span>
+                <span key={h} style={{ fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1px' }}>{h}</span>
               ))}
             </div>
             {novosFiltrados.map((p, i) => {
@@ -165,7 +165,7 @@ export default function TriagemClient({
                   }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <span style={{ fontSize: 18, fontWeight: 800, color: scoreColor, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', lineHeight: 1, letterSpacing: '-0.5px' }}>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: scoreColor, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', lineHeight: 1, letterSpacing: '-0.5px', fontVariantNumeric: 'tabular-nums' }}>
                       {p._score.score.toFixed(1)}
                     </span>
                     <span style={{ fontSize: 9, fontWeight: 700, color: scoreColor, letterSpacing: '0.5px', background: scoreBg, padding: '1px 5px', borderRadius: 3, display: 'inline-block' }}>
@@ -213,7 +213,7 @@ export default function TriagemClient({
           </h2>
           <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', overflow: 'hidden' }}>
             <div style={{ padding: '8px 16px', borderBottom: '1px solid #1e293b', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.8px', background: 'rgba(146,64,14,0.15)', padding: '2px 8px', borderRadius: 4 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '1px', background: 'rgba(146,64,14,0.15)', padding: '2px 8px', borderRadius: 4 }}>
                 Revisão em andamento
               </span>
               <span style={{ fontSize: 11, color: '#475569' }}>Pedidos em revisão pelo operador</span>

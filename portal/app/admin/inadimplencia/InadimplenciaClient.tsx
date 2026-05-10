@@ -107,7 +107,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                 <thead>
                   <tr style={{ borderBottom: '1px solid #1e293b' }}>
                     {['Empresa', 'Equipamento', 'Score CNPJ', 'Valor', 'Término', 'Situação', ''].map((h) => (
-                      <th key={h} style={{ textAlign: 'left', padding: '8px 16px', fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.8px', whiteSpace: 'nowrap' }}>{h}</th>
+                      <th key={h} style={{ textAlign: 'left', padding: '8px 16px', fontSize: 10, fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -125,7 +125,7 @@ export default function InadimplenciaClient({ rows }: { rows: InadimplenciaRow[]
                           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{p.equipamento_nome ?? '—'}</span>
                         </td>
                         <td style={{ padding: '11px 16px' }}>
-                          <span style={{ fontSize: 15, fontWeight: 800, color: scoreColor, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>{p._scoreNum.toFixed(1)}</span>
+                          <span style={{ fontSize: 15, fontWeight: 800, color: scoreColor, fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>{p._scoreNum.toFixed(1)}</span>
                         </td>
                         <td style={{ padding: '11px 16px', color: p._valor ? '#f1f5f9' : '#475569', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap' }}>
                           {p._valor ? `R$ ${p._valor.toLocaleString('pt-BR')}` : '—'}

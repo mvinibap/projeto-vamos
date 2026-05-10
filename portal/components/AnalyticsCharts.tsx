@@ -140,7 +140,7 @@ export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alo
       {/* Grid dos 2 charts */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
         <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px' }}>
-          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 16 }}>
+          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>
             Top estados
           </p>
           {view === 'barras'
@@ -149,7 +149,7 @@ export default function AnalyticsCharts({ statusMap: _statusMap, topEstados, alo
         </div>
 
         <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '20px' }}>
-          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 16 }}>
+          <p style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>
             Alocação de equipamentos
           </p>
           {view === 'barras'

@@ -125,7 +125,7 @@ export default async function AdminDashboard() {
       {/* ZONA 1 — Alert strip */}
       {hasAlerts && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.8px', flexShrink: 0 }}>
+          <span style={{ fontSize: 11, color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', flexShrink: 0 }}>
             Atenção
           </span>
           {novos.length > 0 && (
@@ -162,19 +162,19 @@ export default async function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
         <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
           <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Taxa de aprovação</p>
-          <p style={{ fontSize: 30, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+          <p style={{ fontSize: 30, fontWeight: 800, color: taxaAprovacao >= 60 ? '#4ade80' : taxaAprovacao >= 30 ? '#facc15' : '#f87171', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {taxaAprovacao}%
           </p>
         </div>
         <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
           <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Ticket médio estimado</p>
-          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {ticketMedio ? `R$ ${ticketMedio.toLocaleString('pt-BR')}` : '—'}
           </p>
         </div>
         <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #1e293b', padding: '18px 20px' }}>
           <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8, fontWeight: 500 }}>Valor em locação ativa</p>
-          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)' }}>
+          <p style={{ fontSize: 30, fontWeight: 800, color: '#f1f5f9', lineHeight: 1, letterSpacing: '-1px', fontFamily: 'var(--font-display, Cabinet Grotesk, sans-serif)', fontVariantNumeric: 'tabular-nums' }}>
             {valorAtivo > 0 ? `R$ ${valorAtivo.toLocaleString('pt-BR')}` : '—'}
           </p>
         </div>
