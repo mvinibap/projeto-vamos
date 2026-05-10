@@ -75,7 +75,7 @@ export default function AdminSidebar({ triageCount }: { triageCount?: number }) 
   const pathname = usePathname()
   // Desktop: collapsed = 80px rail, expanded = 220px. Mobile: closed = off-canvas, open = 280px drawer.
   const [isMobile, setIsMobile] = useState(false)
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia(MOBILE_BREAKPOINT)
