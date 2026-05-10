@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 const STATS = [
-  { from: 0,  target: 20, suffix: '+', label: 'Categorias de equipamento' },
-  { from: 0,  target: 27, suffix: '',  label: 'Estados cobertos' },
-  { from: 0,  target: 15, suffix: 'k', label: 'Ativos disponíveis' },
-  { from: 96, target: 48, suffix: 'h', label: 'Para receber proposta' },
+  { from: 0,  target: 20, suffix: '+', label: 'Categorias de equipamento', prefix: '' },
+  { from: 0,  target: 27, suffix: '',  label: 'Estados cobertos',           prefix: '' },
+  { from: 0,  target: 15, suffix: 'k', label: 'Ativos disponíveis',         prefix: '' },
+  { from: 48, target: 4,  suffix: 'h', label: 'Para pedidos pré-aprovados', prefix: 'a partir de ' },
 ]
 
 function useCountTo(from: number, target: number, duration: number, active: boolean) {
@@ -25,10 +25,11 @@ function useCountTo(from: number, target: number, duration: number, active: bool
   return value
 }
 
-function StatItem({ from, target, suffix, label, active }: typeof STATS[0] & { active: boolean }) {
+function StatItem({ from, target, suffix, label, prefix, active }: typeof STATS[0] & { active: boolean }) {
   const count = useCountTo(from, target, 700, active)
   return (
     <div>
+      {prefix && <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 500, marginBottom: 1 }}>{prefix}</div>}
       <div className="font-display" style={{ fontSize: 38, fontWeight: 800, color: 'var(--text)', letterSpacing: '-1.5px', lineHeight: 1 }}>
         {count}<span style={{ color: 'var(--red)' }}>{suffix}</span>
       </div>
